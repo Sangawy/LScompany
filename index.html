@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبەی قەبارەی کارتۆن</title>
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --secondary-color: #6c1ad1;
+            --success-color: #00b074;
+            --danger-color: #ff5c75;
+            --warning-color: #ffae0e;
+            --info-color: #18b9c3;
+            --light-color: #f6f8fd;
+            --dark-color: #22295f;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6f8fd 0%, #e9eeff 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-top: 4px solid var(--primary-color);
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--dark-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 10px;
+        }
+        
+        h2 {
+            color: var(--dark-color);
+            font-size: 1.4rem;
+            margin: 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .dimensions-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .dimension-field {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-align: right;
+            background-color: var(--light-color);
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+        }
+        
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(74, 108, 247, 0.2);
+        }
+        
+        button:hover {
+            box-shadow: 0 6px 15px rgba(74, 108, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff5c75 0%, #ff3b5c 100%);
+            box-shadow: 0 4px 10px rgba(255, 92, 117, 0.2);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 6px 15px rgba(255, 92, 117, 0.3);
+        }
+        
+        .result {
+            background: linear-gradient(135deg, rgba(74, 108, 247, 0.1) 0%, rgba(108, 26, 209, 0.1) 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.2rem;
+            border-right: 4px solid var(--primary-color);
+            display: none;
+        }
+        
+        .total-volume {
+            background: linear-gradient(135deg, rgba(0, 176, 116, 0.1) 0%, rgba(0, 176, 116, 0.2) 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-right: 4px solid var(--success-color);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+        }
+        
+        th {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8faff;
+        }
+        
+        tr:hover {
+            background-color: #eef2ff;
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, rgba(0, 176, 116, 0.1) 0%, rgba(0, 176, 116, 0.2) 100%);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .summary-table th {
+            background: var(--success-color);
+            color: white;
+            padding: 10px;
+            text-align: right;
+        }
+        
+        .summary-table td {
+            padding: 10px;
+            background: white;
+            text-align: right;
+        }
+        
+        .summary-table tr:hover td {
+            background-color: #f0fff7;
+        }
+        
+        /* ڕێکخستنی مۆبایل */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .btn-row {
+                flex-direction: column;
+            }
+            
+            button {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حاسبەی قەبارەی کارتۆن</h1>
+        
+        <div class="card">
+            <div class="form-group">
+                <label for="trackNumber">ژمارەی تراک:</label>
+                <input type="text" id="trackNumber" placeholder="ژمارەی تراک بنووسە" inputmode="numeric">
+            </div>
+            
+            <div class="dimensions-row">
+                <div class="form-group dimension-field">
+                    <label for="width">پانی (م):</label>
+                    <input type="number" id="width" step="0.01" placeholder="پانی" inputmode="decimal">
+                </div>
+                
+                <div class="form-group dimension-field">
+                    <label for="length">درێژی (م):</label>
+                    <input type="number" id="length" step="0.01" placeholder="درێژی" inputmode="decimal">
+                </div>
+                
+                <div class="form-group dimension-field">
+                    <label for="depth">قوڵی (م):</label>
+                    <input type="number" id="depth" step="0.01" placeholder="قوڵی" inputmode="decimal">
+                </div>
+            </div>
+            
+            <div class="btn-row">
+                <button onclick="calculateVolume()">ژمێرکاری قەبارە</button>
+                <button onclick="addToList()">زیادکردن بۆ لیست</button>
+            </div>
+            
+            <div id="result" class="result">
+                قەبارە: <span id="volume">0</span> مەتری سێجا
+            </div>
+        </div>
+        
+        <div class="total-volume">
+            کۆی گشتی قەبارە: <span id="totalVolume">0</span> مەتری سێجا
+        </div>
+        
+        <div id="summarySection" class="summary-card" style="display: none;">
+            <h2>پوختەی قەبارە بەپێی تراک</h2>
+            <div class="table-responsive">
+                <table id="summaryTable" class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>ژمارەی تراک</th>
+                            <th>ژمارەی کارتۆن</th>
+                            <th>کۆی قەبارە (م³)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryBody">
+                        <!-- داتا لێرە زیاد دەکرێت -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>لیستی کارتۆنەکان</h2>
+            <div class="table-responsive">
+                <table id="boxList">
+                    <thead>
+                        <tr>
+                            <th>ژمارەی تراک</th>
+                            <th>پانی (م)</th>
+                            <th>درێژی (م)</th>
+                            <th>قوڵی (م)</th>
+                            <th>قەبارە (م³)</th>
+                            <th>کردار</th>
+                        </tr>
+                    </thead>
+                    <tbody id="boxListBody">
+                        <!-- داتا لێرە زیاد دەکرێت -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بۆ پاراستنی داتا
+        let boxes = [];
+        
+        // بۆ ژمێرکاری قەبارەی کارتۆن
+        function calculateVolume() {
+            const width = parseFloat(document.getElementById('width').value);
+            const length = parseFloat(document.getElementById('length').value);
+            const depth = parseFloat(document.getElementById('depth').value);
+            
+            if (isNaN(width) || isNaN(length) || isNaN(depth)) {
+                alert('تکایە ژمارەی دروست بنووسە بۆ هەموو خانەکان');
+                return;
+            }
+            
+            const volume = width * length * depth;
+            document.getElementById('volume').textContent = volume.toFixed(3);
+            document.getElementById('result').style.display = 'block';
+        }
+        
+        // بۆ زیادکردنی کارتۆن بۆ لیست
+        function addToList() {
+            const trackNumber = document.getElementById('trackNumber').value;
+            const width = parseFloat(document.getElementById('width').value);
+            const length = parseFloat(document.getElementById('length').value);
+            const depth = parseFloat(document.getElementById('depth').value);
+            
+            if (isNaN(width) || isNaN(length) || isNaN(depth)) {
+                alert('تکایە ژمارەی دروست بنووسە بۆ هەموو خانەکان');
+                return;
+            }
+            
+            if (!trackNumber) {
+                alert('تکایە ژمارەی تراک بنووسە');
+                return;
+            }
+            
+            const volume = width * length * depth;
+            
+            // زیادکردنی کارتۆن بۆ ئەڕەی
+            const box = {
+                trackNumber: trackNumber,
+                width: width,
+                length: length,
+                depth: depth,
+                volume: volume
+            };
+            
+            boxes.push(box);
+            
+            // نوێکردنەوەی خشتەکە
+            updateBoxList();
+            
+            // نوێکردنەوەی کۆی گشتی
+            updateTotalVolume();
+            
+            // نوێکردنەوەی پوختەی تراک
+            updateTrackSummary();
+            
+            // پاککردنەوەی فۆرمەکە
+            document.getElementById('width').value = '';
+            document.getElementById('length').value = '';
+            document.getElementById('depth').value = '';
+            document.getElementById('result').style.display = 'none';
+            
+            // فۆکوس بکە لە پانی
+            document.getElementById('width').focus();
+        }
+        
+        // بۆ نوێکردنەوەی خشتەی کارتۆنەکان
+        function updateBoxList() {
+            const tableBody = document.getElementById('boxListBody');
+            
+            // پاککردنەوەی خشتە
+            tableBody.innerHTML = '';
+            
+            // زیادکردنی ڕیزی نوێ بۆ هەر کارتۆنێک
+            boxes.forEach((box, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${box.trackNumber}</td>
+                    <td>${box.width.toFixed(2)}</td>
+                    <td>${box.length.toFixed(2)}</td>
+                    <td>${box.depth.toFixed(2)}</td>
+                    <td>${box.volume.toFixed(3)}</td>
+                    <td>
+                        <button class="btn-danger" onclick="deleteBox(${index})">سڕینەوە</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // نوێکردنەوەی پوختەی تراک
+        function updateTrackSummary() {
+            const summarySection = document.getElementById('summarySection');
+            const summaryBody = document.getElementById('summaryBody');
+            
+            // گرووپ کردنی کارتۆنەکان بەپێی تراک
+            const trackGroups = {};
+            
+            boxes.forEach(box => {
+                if (!trackGroups[box.trackNumber]) {
+                    trackGroups[box.trackNumber] = {
+                        count: 0,
+                        totalVolume: 0
+                    };
+                }
+                
+                trackGroups[box.trackNumber].count++;
+                trackGroups[box.trackNumber].totalVolume += box.volume;
+            });
+            
+            // ئەگەر هیچ داتایەک نەبوو
+            if (Object.keys(trackGroups).length === 0) {
+                summarySection.style.display = 'none';
+                return;
+            }
+            
+            // نیشاندانی بەشی پوختە
+            summarySection.style.display = 'block';
+            
+            // پاککردنەوەی خشتە
+            summaryBody.innerHTML = '';
+            
+            // زیادکردنی ڕیزەکان
+            for (const track in trackGroups) {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${track}</td>
+                    <td>${trackGroups[track].count}</td>
+                    <td>${trackGroups[track].totalVolume.toFixed(3)}</td>
+                `;
+                
+                summaryBody.appendChild(row);
+            }
+        }
+        
+        // سڕینەوەی کارتۆن
+        function deleteBox(index) {
+            boxes.splice(index, 1);
+            updateBoxList();
+            updateTotalVolume();
+            updateTrackSummary();
+        }
+        
+        // نوێکردنەوەی کۆی گشتی قەبارە
+        function updateTotalVolume() {
+            const total = boxes.reduce((sum, box) => sum + box.volume, 0);
+            document.getElementById('totalVolume').textContent = total.toFixed(3);
+        }
+        
+        // بۆ دڵنیابوون لە کیبۆردی ژمارەیی
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputFields = document.querySelectorAll('input[type="number"]');
+            
+            inputFields.forEach(input => {
+                input.setAttribute('inputmode', 'decimal');
+            });
+        });
+    </script>
+</body>
+</html>
