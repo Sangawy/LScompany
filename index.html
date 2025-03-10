@@ -141,6 +141,27 @@
             box-shadow: 0 6px 15px rgba(255, 92, 117, 0.3);
         }
         
+        .copy-btn {
+            background: linear-gradient(135deg, #18b9c3 0%, #0e8f97 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #0e8f97 0%, #0a7a82 100%);
+            transform: translateY(-2px);
+        }
+        
+        .copy-success {
+            background: linear-gradient(135deg, #00b074 0%, #009962 100%);
+        }
+        
         .result {
             background: linear-gradient(135deg, rgba(74, 108, 247, 0.1) 0%, rgba(108, 26, 209, 0.1) 100%);
             padding: 15px;
@@ -276,6 +297,7 @@
             <div class="btn-row">
                 <button onclick="calculateVolume()">ئەنجامی قەبارە</button>
                 <button onclick="addToList()">زیادکردن بۆ لیست</button>
+                <button onclick="clearAllData()" class="btn-danger">سڕینەوەی هەموو</button>
             </div>
             
             <div id="result" class="result">
@@ -296,6 +318,7 @@
                             <th>ژمارەی تراک</th>
                             <th>ژمارەی کارتۆن</th>
                             <th>کۆی قەبارە (م³)</th>
+                            <th>کۆپی</th>
                         </tr>
                     </thead>
                     <tbody id="summaryBody">
@@ -330,6 +353,13 @@
     <script>
         // بۆ پاراستنی داتا
         let boxes = [];
+        
+        // بارکردنی داتا لە local storage ئەگەر هەبوو
+        window.onload = function() {
+            loadData();
+            // خۆکار سڕینەوەی داتا دوای 1 کاتژمێر
+            checkDataExpiration();
+        };
         
         // بۆ ژمێرکاری قەبارەی کارتۆن
         function calculateVolume() {
@@ -462,6 +492,7 @@
                     <td>${track}</td>
                     <td>${trackGroups[track].count}</td>
                     <td>${trackGroups[track].totalVolume.toFixed(3)}</td>
+                    <td><button class="copy-btn" onclick="copyText('${trackGroups[track].totalVolume.toFixed(3)}')"><span class="copy-text">کۆپی</span></button></td>
                 `;
                 
                 summaryBody.appendChild(row);
@@ -483,6 +514,136 @@
         }
         
         // بۆ دڵنیابوون لە کیبۆردی ژمارەیی
+        // بۆ کۆپی کردنی ئەنجام
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // دەستکەوتنی کۆپی
+                const buttons = document.querySelectorAll('.copy-btn');
+                buttons.forEach(btn => {
+                    const span = btn.querySelector('.copy-text');
+                    span.textContent = 'کۆپی';
+                    btn.classList.remove('copy-success');
+                });
+                
+                event.target.parentElement.classList.add('copy-success');
+                const span = event.target.querySelector('.copy-text') || event.target;
+                span.textContent = 'کۆپی کرا!';
+                
+                setTimeout(function() {
+                    if (event.target.classList.contains('copy-success')) {
+                        event.target.classList.remove('copy-success');
+                        span.textContent = 'کۆپی';
+                    }
+                }, 2000);
+            });
+        }
+        
+        // بۆ کۆپی کردنی کۆی گشتی
+        function copyTotal() {
+            const total = document.getElementById('totalVolume').textContent;
+            copyText(total);
+        }
+        
+        // پاشەکەوتکردنی داتا لە local storage
+        function saveData() {
+            const now = new Date().getTime();
+            const data = {
+                boxes: boxes,
+                timestamp: now
+            };
+            localStorage.setItem('boxCalculatorData', JSON.stringify(data));
+        }
+        
+        // بارکردنی داتا لە local storage
+        function loadData() {
+            const savedData = localStorage.getItem('boxCalculatorData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                boxes = data.boxes;
+                updateBoxList();
+                updateTotalVolume();
+                updateTrackSummary();
+            }
+        }
+        
+        // پشکنینی بەسەرچوونی داتا
+        function checkDataExpiration() {
+            const savedData = localStorage.getItem('boxCalculatorData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                const now = new Date().getTime();
+                const timeDiff = now - data.timestamp;
+                
+                // ئەگەر زیاتر لە 1 کاتژمێر تێپەڕی (3,600,000 میلی چرکە)
+                if (timeDiff > 3600000) {
+                    // سڕینەوەی داتا
+                    localStorage.removeItem('boxCalculatorData');
+                    boxes = [];
+                    updateBoxList();
+                    updateTotalVolume();
+                    updateTrackSummary();
+                } else {
+                    // دانانی تایمەر بۆ سڕینەوەی داتا کاتێک بەسەر دەچێت
+                    const timeLeft = 3600000 - timeDiff;
+                    setTimeout(function() {
+                        localStorage.removeItem('boxCalculatorData');
+                        boxes = [];
+                        updateBoxList();
+                        updateTotalVolume();
+                        updateTrackSummary();
+                    }, timeLeft);
+                }
+            }
+        }
+        
+        // بۆ سڕینەوەی هەموو داتا بە دەستی
+        function clearAllData() {
+            if (confirm('دڵنیایت دەتەوێت هەموو داتاکان بسڕیتەوە؟')) {
+                localStorage.removeItem('boxCalculatorData');
+                boxes = [];
+                updateBoxList();
+                updateTotalVolume();
+                updateTrackSummary();
+            }
+        }
+        
+        // نوێکردنەوەی داتا لە local storage دوای هەر گۆڕانکارییەک
+        function updateBoxList() {
+            const tableBody = document.getElementById('boxListBody');
+            
+            // پاککردنەوەی خشتە
+            tableBody.innerHTML = '';
+            
+            // زیادکردنی ڕیزی نوێ بۆ هەر کارتۆنێک
+            boxes.forEach((box, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${box.trackNumber}</td>
+                    <td>${box.width.toFixed(2)}</td>
+                    <td>${box.length.toFixed(2)}</td>
+                    <td>${box.depth.toFixed(2)}</td>
+                    <td>${box.volume.toFixed(3)}</td>
+                    <td>
+                        <button class="btn-danger" onclick="deleteBox(${index})">سڕینەوە</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // پاشەکەوتکردنی داتا
+            saveData();
+        }
+        
+        // سڕینەوەی کارتۆن
+        function deleteBox(index) {
+            boxes.splice(index, 1);
+            updateBoxList();
+            updateTotalVolume();
+            updateTrackSummary();
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             const inputFields = document.querySelectorAll('input[type="number"]');
             
