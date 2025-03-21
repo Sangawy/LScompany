@@ -36,40 +36,6 @@
             padding: 15px;
         }
         
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .logo {
-            max-height: 60px;
-            margin: 0 15px;
-        }
-        
-        .lang-selector {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            z-index: 100;
-        }
-        
-        .lang-selector select {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 2px solid var(--primary-color);
-            background-color: white;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        
-        [dir="rtl"] .lang-selector {
-            left: auto;
-            right: 15px;
-        }
-        
         .card {
             background: white;
             border-radius: 16px;
@@ -79,15 +45,37 @@
             border-top: 4px solid var(--primary-color);
         }
         
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            height: 60px;
+            margin: 0 15px;
+        }
+        
         h1 {
             text-align: center;
             color: var(--dark-color);
             font-size: 1.8rem;
-            margin-bottom: 20px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             padding: 10px;
+        }
+        
+        .title-container {
+            text-align: center;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-top: 5px;
         }
         
         h2 {
@@ -131,11 +119,29 @@
             background-color: var(--light-color);
         }
         
-        [dir="ltr"] input {
-            text-align: left;
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
         }
         
-        input:focus {
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: var(--light-color);
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2322295f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        
+        select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
@@ -145,6 +151,23 @@
             display: flex;
             gap: 10px;
             margin: 20px 0;
+        }
+        
+        .lang-switcher {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+        }
+        
+        .lang-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
         }
         
         button {
@@ -191,11 +214,6 @@
             transition: all 0.3s;
         }
         
-        [dir="ltr"] .copy-btn {
-            margin-right: 0;
-            margin-left: 10px;
-        }
-        
         .copy-btn:hover {
             background: linear-gradient(135deg, #0e8f97 0%, #0a7a82 100%);
             transform: translateY(-2px);
@@ -216,11 +234,6 @@
             display: none;
         }
         
-        [dir="ltr"] .result {
-            border-right: none;
-            border-left: 4px solid var(--primary-color);
-        }
-        
         .total-volume {
             background: linear-gradient(135deg, rgba(0, 176, 116, 0.1) 0%, rgba(0, 176, 116, 0.2) 100%);
             padding: 15px;
@@ -230,11 +243,6 @@
             font-weight: bold;
             font-size: 1.2rem;
             border-right: 4px solid var(--success-color);
-        }
-        
-        [dir="ltr"] .total-volume {
-            border-right: none;
-            border-left: 4px solid var(--success-color);
         }
         
         table {
@@ -249,10 +257,6 @@
         th, td {
             padding: 12px 15px;
             text-align: right;
-        }
-        
-        [dir="ltr"] th, [dir="ltr"] td {
-            text-align: left;
         }
         
         th {
@@ -289,18 +293,10 @@
             text-align: right;
         }
         
-        [dir="ltr"] .summary-table th {
-            text-align: left;
-        }
-        
         .summary-table td {
             padding: 10px;
             background: white;
             text-align: right;
-        }
-        
-        [dir="ltr"] .summary-table td {
-            text-align: left;
         }
         
         .summary-table tr:hover td {
@@ -317,6 +313,10 @@
                 font-size: 1.5rem;
             }
             
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
             .table-responsive {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
@@ -330,77 +330,106 @@
                 margin-bottom: 10px;
             }
             
-            .lang-selector {
+            .lang-switcher {
                 position: relative;
-                top: auto;
-                left: auto;
-                right: auto;
-                text-align: center;
+                top: 0;
+                left: 0;
                 margin-bottom: 15px;
-            }
-            
-            .header {
-                flex-direction: column;
+                text-align: center;
             }
             
             .logo {
-                margin-bottom: 10px;
+                height: 50px;
+                margin: 5px;
             }
+        }
+        
+        /* دیزاین بۆ لای چەپ */
+        .ltr {
+            direction: ltr;
+        }
+        
+        .ltr input, .ltr select {
+            text-align: left;
+        }
+        
+        .ltr th, .ltr td {
+            text-align: left;
         }
     </style>
 </head>
-<body>
+<body id="app-body">
+    <div class="lang-switcher">
+        <select id="langSelect" class="lang-select" onchange="changeLanguage()">
+            <option value="ku">کوردی</option>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="fa">فارسی</option>
+        </select>
+    </div>
+    
     <div class="container">
-        <div class="lang-selector">
-            <select id="languageSelector" onchange="changeLanguage()">
-                <option value="ku">کوردی</option>
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
-                <option value="fa">فارسی</option>
-            </select>
-        </div>
-        
         <div class="header">
-            <img src="https://i.postimg.cc/q7Dk9K8F/LS-Copy.png" alt="LS Express Company Logo" class="logo">
-            <h1 id="mainTitle">کۆمپانیای لوتکەی شاهۆ</h1>
+            <img src="https://i.ibb.co/YFTjH50/LS-Copy.png" alt="لوتکەی شاهۆ" class="logo" id="company-logo">
+            <div class="title-container">
+                <h1 id="app-title">کۆمپانیای لوتکەی شاهۆ</h1>
+                <div class="subtitle" id="app-subtitle">حاسبەی قەبارەی کارتۆن</div>
+            </div>
         </div>
         
         <div class="card">
             <div class="form-group">
-                <label for="trackNumber" id="label-trackNumber">ژمارەی تراک:</label>
-                <input type="text" id="trackNumber" placeholder="" inputmode="numeric">
+                <label for="trackNumber" id="label-track">ژمارەی تراک:</label>
+                <input type="text" id="trackNumber" placeholder="ژمارەی تراک بنووسە" inputmode="numeric">
             </div>
             
             <div class="dimensions-row">
                 <div class="form-group dimension-field">
-                    <label for="width" id="label-width">پانی (م):</label>
-                    <input type="number" id="width" step="0.01" placeholder="" inputmode="decimal">
+                    <label for="dim1" id="label-dim1">پێوانە 1 (م):</label>
+                    <input type="number" id="dim1" step="0.01" placeholder="پێوانەی یەکەم" inputmode="decimal">
                 </div>
                 
                 <div class="form-group dimension-field">
-                    <label for="length" id="label-length">درێژی (م):</label>
-                    <input type="number" id="length" step="0.01" placeholder="" inputmode="decimal">
+                    <label for="dim2" id="label-dim2">پێوانە 2 (م):</label>
+                    <input type="number" id="dim2" step="0.01" placeholder="پێوانەی دووەم" inputmode="decimal">
                 </div>
                 
                 <div class="form-group dimension-field">
-                    <label for="depth" id="label-depth">قوڵی (م):</label>
-                    <input type="number" id="depth" step="0.01" placeholder="" inputmode="decimal">
+                    <label for="dim3" id="label-dim3">پێوانە 3 (م):</label>
+                    <input type="number" id="dim3" step="0.01" placeholder="پێوانەی سێیەم" inputmode="decimal">
+                </div>
+            </div>
+            
+            <div class="dimensions-row">
+                <div class="form-group dimension-field">
+                    <label for="boxCount" id="label-count">ژمارەی کارتۆن:</label>
+                    <input type="number" id="boxCount" min="1" value="1" step="1" placeholder="ژمارەی کارتۆن" inputmode="numeric">
+                </div>
+                
+                <div class="form-group dimension-field">
+                    <label for="weight" id="label-weight">کێش (کگم):</label>
+                    <input type="number" id="weight" step="0.01" placeholder="کێشی کارتۆن" inputmode="decimal">
                 </div>
             </div>
             
             <div class="btn-row">
-                <button onclick="calculateVolume()" id="btn-calculate">ژمێرکاری قەبارە</button>
+                <button onclick="calculateVolume()" id="btn-calculate">ئەنجامی قەبارە</button>
                 <button onclick="addToList()" id="btn-add">زیادکردن بۆ لیست</button>
                 <button onclick="clearAllData()" class="btn-danger" id="btn-clear">سڕینەوەی هەموو</button>
             </div>
             
             <div id="result" class="result">
-                <span id="result-text">قەبارە:</span> <span id="volume">0</span> <span id="cubic-meter">مەتری سێجا</span>
+                <span id="result-label">قەبارە:</span> <span id="volume">0</span> <span id="cubic-meter">مەتری سێجا</span>
             </div>
         </div>
         
         <div class="total-volume">
-            <span id="total-volume-text">کۆی گشتی قەبارە:</span> <span id="totalVolume">0</span> <span id="total-cubic-meter">مەتری سێجا</span>
+            <span id="total-label">کۆی گشتی قەبارە:</span> <span id="totalVolume">0</span> <span id="total-cubic-meter">مەتری سێجا</span>
+            <button id="copyTotalButton" class="copy-btn" onclick="copyTotal()">
+                <span class="copy-text" id="copy-text">کۆپی</span>
+            </button>
+            <br>
+            <span id="total-weight-label">کۆی گشتی کێش:</span> <span id="totalWeight">0</span> <span id="total-weight-unit">کگم</span>
         </div>
         
         <div id="summarySection" class="summary-card" style="display: none;">
@@ -409,10 +438,11 @@
                 <table id="summaryTable" class="summary-table">
                     <thead>
                         <tr>
-                            <th id="th-track-number">ژمارەی تراک</th>
-                            <th id="th-box-count">ژمارەی کارتۆن</th>
-                            <th id="th-total-volume">کۆی قەبارە (م³)</th>
-                            <th id="th-copy">کۆپی</th>
+                            <th id="summary-track">ژمارەی تراک</th>
+                            <th id="summary-count">ژمارەی کارتۆن</th>
+                            <th id="summary-volume">کۆی قەبارە (م³)</th>
+                            <th id="summary-weight">کێش (کگم)</th>
+                            <th id="summary-copy">کۆپی</th>
                         </tr>
                     </thead>
                     <tbody id="summaryBody">
@@ -423,17 +453,19 @@
         </div>
         
         <div class="card">
-            <h2 id="box-list-title">لیستی کارتۆنەکان</h2>
+            <h2 id="list-title">لیستی کارتۆنەکان</h2>
             <div class="table-responsive">
                 <table id="boxList">
                     <thead>
                         <tr>
-                            <th id="th-track">ژمارەی تراک</th>
-                            <th id="th-width">پانی (م)</th>
-                            <th id="th-length">درێژی (م)</th>
-                            <th id="th-depth">قوڵی (م)</th>
-                            <th id="th-volume">قەبارە (م³)</th>
-                            <th id="th-action">کردار</th>
+                            <th id="list-track">ژمارەی تراک</th>
+                            <th id="list-dim1">پێوانە 1 (م)</th>
+                            <th id="list-dim2">پێوانە 2 (م)</th>
+                            <th id="list-dim3">پێوانە 3 (م)</th>
+                            <th id="list-count">ژمارە</th>
+                            <th id="list-volume">قەبارە (م³)</th>
+                            <th id="list-weight">کێش (کگم)</th>
+                            <th id="list-action">کردار</th>
                         </tr>
                     </thead>
                     <tbody id="boxListBody">
@@ -443,302 +475,368 @@
             </div>
         </div>
     </div>
-
     <script>
         // بۆ پاراستنی داتا
         let boxes = [];
-        let currentLanguage = "ku";
         
-        // Language translations
-        const translations = {
+        // زمانەکان
+        const languages = {
             ku: {
-                dir: "rtl",
-                title: "کۆمپانیای لوتکەی شاهۆ - حاسبەی قەبارەی کارتۆن",
-                mainTitle: "کۆمپانیای لوتکەی شاهۆ",
-                subTitle: "حاسبەی قەبارەی کارتۆن",
-                trackNumber: "ژمارەی تراک:",
-                trackNumberPlaceholder: "ژمارەی تراک بنووسە",
-                width: "پانی (م):",
-                widthPlaceholder: "پانی",
-                length: "درێژی (م):",
-                lengthPlaceholder: "درێژی",
-                depth: "قوڵی (م):",
-                depthPlaceholder: "قوڵی",
-                calculate: "ژمێرکاری قەبارە",
-                addToList: "زیادکردن بۆ لیست",
-                clearAll: "سڕینەوەی هەموو",
-                resultText: "قەبارە:",
-                cubicMeter: "مەتری سێجا",
-                totalVolumeText: "کۆی گشتی قەبارە:",
-                summaryTitle: "پوختەی قەبارە بەپێی تراک",
-                thTrackNumber: "ژمارەی تراک",
-                thBoxCount: "ژمارەی کارتۆن",
-                thTotalVolume: "کۆی قەبارە (م³)",
-                thCopy: "کۆپی",
-                boxListTitle: "لیستی کارتۆنەکان",
-                thTrack: "ژمارەی تراک",
-                thWidth: "پانی (م)",
-                thLength: "درێژی (م)",
-                thDepth: "قوڵی (م)",
-                thVolume: "قەبارە (م³)",
-                thAction: "کردار",
-                deleteBtn: "سڕینەوە",
-                copyBtn: "کۆپی",
-                copiedBtn: "کۆپی کرا!",
-                confirmClear: "دڵنیایت دەتەوێت هەموو داتاکان بسڕیتەوە؟",
-                invalidInput: "تکایە ژمارەی دروست بنووسە بۆ هەموو خانەکان",
-                noTrackNumber: "تکایە ژمارەی تراک بنووسە"
-            },
-            ar: {
-                dir: "rtl",
-                title: "شركة لوتكه شاهو - حاسبة حجم الكرتون",
-                mainTitle: "شركة لوتكه شاهو",
-                subTitle: "حاسبة حجم الكرتون",
-                trackNumber: "رقم التتبع:",
-                trackNumberPlaceholder: "أدخل رقم التتبع",
-                width: "العرض (م):",
-                widthPlaceholder: "العرض",
-                length: "الطول (م):",
-                lengthPlaceholder: "الطول",
-                depth: "العمق (م):",
-                depthPlaceholder: "العمق",
-                calculate: "حساب الحجم",
-                addToList: "إضافة إلى القائمة",
-                clearAll: "مسح الكل",
-                resultText: "الحجم:",
-                cubicMeter: "متر مكعب",
-                totalVolumeText: "إجمالي الحجم:",
-                summaryTitle: "ملخص الحجم حسب رقم التتبع",
-                thTrackNumber: "رقم التتبع",
-                thBoxCount: "عدد الصناديق",
-                thTotalVolume: "إجمالي الحجم (م³)",
-                thCopy: "نسخ",
-                boxListTitle: "قائمة الصناديق",
-                thTrack: "رقم التتبع",
-                thWidth: "العرض (م)",
-                thLength: "الطول (م)",
-                thDepth: "العمق (م)",
-                thVolume: "الحجم (م³)",
-                thAction: "الإجراء",
-                deleteBtn: "حذف",
-                copyBtn: "نسخ",
-                copiedBtn: "تم النسخ!",
-                confirmClear: "هل أنت متأكد من أنك تريد مسح جميع البيانات؟",
-                invalidInput: "الرجاء إدخال أرقام صحيحة لجميع الحقول",
-                noTrackNumber: "الرجاء إدخال رقم التتبع"
+                dir: 'rtl',
+                title: 'کۆمپانیای لوتکەی شاهۆ',
+                subtitle: 'حاسبەی قەبارەی کارتۆن',
+                trackNumber: 'ژمارەی تراک:',
+                dim1: 'پێوانە 1 (م):',
+                dim2: 'پێوانە 2 (م):',
+                dim3: 'پێوانە 3 (م):',
+                calculateBtn: 'ئەنجامی قەبارە',
+                addBtn: 'زیادکردن بۆ لیست',
+                clearBtn: 'سڕینەوەی هەموو',
+                resultLabel: 'قەبارە:',
+                totalLabel: 'کۆی گشتی قەبارە:',
+                cubicMeter: 'مەتری سێجا',
+                copyText: 'کۆپی',
+                copiedText: 'کۆپی کرا!',
+                summaryTitle: 'پوختەی قەبارە بەپێی تراک',
+                summaryTrack: 'ژمارەی تراک',
+                summaryCount: 'ژمارەی کارتۆن',
+                summaryVolume: 'کۆی قەبارە (م³)',
+                summaryCopy: 'کۆپی',
+                listTitle: 'لیستی کارتۆنەکان',
+                listTrack: 'ژمارەی تراک',
+                listDim1: 'پێوانە 1 (م)',
+                listDim2: 'پێوانە 2 (م)',
+                listDim3: 'پێوانە 3 (م)',
+                listVolume: 'قەبارە (م³)',
+                listAction: 'کردار',
+                deleteText: 'سڕینەوە',
+                confirmClear: 'دڵنیایت دەتەوێت هەموو داتاکان بسڕیتەوە؟',
+                placeholderTrack: 'ژمارەی تراک بنووسە',
+                placeholderDim1: 'پێوانەی یەکەم',
+                placeholderDim2: 'پێوانەی دووەم',
+                placeholderDim3: 'پێوانەی سێیەم',
+                errorInput: 'تکایە ژمارەی دروست بنووسە بۆ هەموو خانەکان',
+                errorTrack: 'تکایە ژمارەی تراک بنووسە',
+                // بۆ ژمارەی کارتۆن
+                count: 'ژمارەی کارتۆن:',
+                listCount: 'ژمارە',
+                placeholderCount: 'ژمارەی کارتۆن',
+                // بۆ کێش
+                weight: 'کێش (کگم):',
+                listWeight: 'کێش (کگم)',
+                placeholderWeight: 'کێشی کارتۆن',
+                totalWeightLabel: 'کۆی گشتی کێش:',
+                weightUnit: 'کگم',
+                summaryWeight: 'کێش (کگم)'
             },
             en: {
-                dir: "ltr",
-                title: "LS Express Company - Box Volume Calculator",
-                mainTitle: "LS Express Company",
-                subTitle: "Box Volume Calculator",
-                trackNumber: "Track Number:",
-                trackNumberPlaceholder: "Enter track number",
-                width: "Width (m):",
-                widthPlaceholder: "Width",
-                length: "Length (m):",
-                lengthPlaceholder: "Length",
-                depth: "Depth (m):",
-                depthPlaceholder: "Depth",
-                calculate: "Calculate Volume",
-                addToList: "Add to List",
-                clearAll: "Clear All",
-                resultText: "Volume:",
-                cubicMeter: "cubic meters",
-                totalVolumeText: "Total Volume:",
-                summaryTitle: "Volume Summary by Track",
-                thTrackNumber: "Track Number",
-                thBoxCount: "Box Count",
-                thTotalVolume: "Total Volume (m³)",
-                thCopy: "Copy",
-                boxListTitle: "Box List",
-                thTrack: "Track Number",
-                thWidth: "Width (m)",
-                thLength: "Length (m)",
-                thDepth: "Depth (m)",
-                thVolume: "Volume (m³)",
-                thAction: "Action",
-                deleteBtn: "Delete",
-                copyBtn: "Copy",
-                copiedBtn: "Copied!",
-                confirmClear: "Are you sure you want to clear all data?",
-                invalidInput: "Please enter valid numbers for all fields",
-                noTrackNumber: "Please enter a track number"
+                dir: 'ltr',
+                title: 'Lutkai Shaho Company',
+                subtitle: 'Box Volume Calculator',
+                trackNumber: 'Track Number:',
+                dim1: 'Dimension 1 (m):',
+                dim2: 'Dimension 2 (m):',
+                dim3: 'Dimension 3 (m):',
+                calculateBtn: 'Calculate Volume',
+                addBtn: 'Add to List',
+                clearBtn: 'Clear All',
+                resultLabel: 'Volume:',
+                totalLabel: 'Total Volume:',
+                cubicMeter: 'cubic meters',
+                copyText: 'Copy',
+                copiedText: 'Copied!',
+                summaryTitle: 'Volume Summary by Track',
+                summaryTrack: 'Track Number',
+                summaryCount: 'Box Count',
+                summaryVolume: 'Total Volume (m³)',
+                summaryCopy: 'Copy',
+                listTitle: 'Box List',
+                listTrack: 'Track Number',
+                listDim1: 'Dimension 1 (m)',
+                listDim2: 'Dimension 2 (m)',
+                listDim3: 'Dimension 3 (m)',
+                listVolume: 'Volume (m³)',
+                listAction: 'Action',
+                deleteText: 'Delete',
+                confirmClear: 'Are you sure you want to clear all data?',
+                placeholderTrack: 'Enter track number',
+                placeholderDim1: 'First dimension',
+                placeholderDim2: 'Second dimension',
+                placeholderDim3: 'Third dimension',
+                errorInput: 'Please enter valid numbers for all fields',
+                errorTrack: 'Please enter a track number',
+                // بۆ ژمارەی کارتۆن
+                count: 'Box Count:',
+                listCount: 'Count',
+                placeholderCount: 'Number of boxes',
+                // بۆ کێش
+                weight: 'Weight (kg):',
+                listWeight: 'Weight (kg)',
+                placeholderWeight: 'Box weight',
+                totalWeightLabel: 'Total Weight:',
+                weightUnit: 'kg',
+                summaryWeight: 'Weight (kg)'
+            },
+            ar: {
+                dir: 'rtl',
+                title: 'شركة لوتكاي شاهو',
+                subtitle: 'حاسبة حجم الصناديق',
+                trackNumber: 'رقم التتبع:',
+                dim1: 'البعد 1 (م):',
+                dim2: 'البعد 2 (م):',
+                dim3: 'البعد 3 (م):',
+                calculateBtn: 'حساب الحجم',
+                addBtn: 'إضافة للقائمة',
+                clearBtn: 'مسح الكل',
+                resultLabel: 'الحجم:',
+                totalLabel: 'إجمالي الحجم:',
+                cubicMeter: 'متر مكعب',
+                copyText: 'نسخ',
+                copiedText: 'تم النسخ!',
+                summaryTitle: 'ملخص الحجم حسب التتبع',
+                summaryTrack: 'رقم التتبع',
+                summaryCount: 'عدد الصناديق',
+                summaryVolume: 'إجمالي الحجم (م³)',
+                summaryCopy: 'نسخ',
+                listTitle: 'قائمة الصناديق',
+                listTrack: 'رقم التتبع',
+                listDim1: 'البعد 1 (م)',
+                listDim2: 'البعد 2 (م)',
+                listDim3: 'البعد 3 (م)',
+                listVolume: 'الحجم (م³)',
+                listAction: 'الإجراء',
+                deleteText: 'حذف',
+                confirmClear: 'هل أنت متأكد من حذف جميع البيانات؟',
+                placeholderTrack: 'أدخل رقم التتبع',
+                placeholderDim1: 'البعد الأول',
+                placeholderDim2: 'البعد الثاني',
+                placeholderDim3: 'البعد الثالث',
+                errorInput: 'الرجاء إدخال أرقام صحيحة لجميع الحقول',
+                errorTrack: 'الرجاء إدخال رقم التتبع',
+                // بۆ ژمارەی کارتۆن
+                count: 'عدد الصناديق:',
+                listCount: 'العدد',
+                placeholderCount: 'عدد الصناديق',
+                // بۆ کێش
+                weight: 'الوزن (كجم):',
+                listWeight: 'الوزن (كجم)',
+                placeholderWeight: 'وزن الصندوق',
+                totalWeightLabel: 'إجمالي الوزن:',
+                weightUnit: 'كجم',
+                summaryWeight: 'الوزن (كجم)'
             },
             fa: {
-                dir: "rtl",
-                title: "شرکت لوتکه شاهو - محاسبه‌گر حجم کارتن",
-                mainTitle: "شرکت لوتکه شاهو",
-                subTitle: "محاسبه‌گر حجم کارتن",
-                trackNumber: "شماره پیگیری:",
-                trackNumberPlaceholder: "شماره پیگیری را وارد کنید",
-                width: "عرض (متر):",
-                widthPlaceholder: "عرض",
-                length: "طول (متر):",
-                lengthPlaceholder: "طول",
-                depth: "عمق (متر):",
-                depthPlaceholder: "عمق",
-                calculate: "محاسبه حجم",
-                addToList: "افزودن به لیست",
-                clearAll: "پاک کردن همه",
-                resultText: "حجم:",
-                cubicMeter: "متر مکعب",
-                totalVolumeText: "حجم کل:",
-                summaryTitle: "خلاصه حجم بر اساس شماره پیگیری",
-                thTrackNumber: "شماره پیگیری",
-                thBoxCount: "تعداد کارتن",
-                thTotalVolume: "حجم کل (متر³)",
-                thCopy: "کپی",
-                boxListTitle: "لیست کارتن‌ها",
-                thTrack: "شماره پیگیری",
-                thWidth: "عرض (متر)",
-                thLength: "طول (متر)",
-                thDepth: "عمق (متر)",
-                thVolume: "حجم (متر³)",
-                thAction: "عملیات",
-                deleteBtn: "حذف",
-                copyBtn: "کپی",
-                copiedBtn: "کپی شد!",
-                confirmClear: "آیا مطمئن هستید که می‌خواهید تمام داده‌ها را پاک کنید؟",
-                invalidInput: "لطفاً اعداد معتبر برای تمام فیلدها وارد کنید",
-                noTrackNumber: "لطفاً شماره پیگیری را وارد کنید"
+                dir: 'rtl',
+                title: 'شرکت لوتکای شاهو',
+                subtitle: 'محاسبه‌گر حجم جعبه',
+                trackNumber: 'شماره پیگیری:',
+                dim1: 'بعد 1 (متر):',
+                dim2: 'بعد 2 (متر):',
+                dim3: 'بعد 3 (متر):',
+                calculateBtn: 'محاسبه حجم',
+                addBtn: 'افزودن به لیست',
+                clearBtn: 'پاک کردن همه',
+                resultLabel: 'حجم:',
+                totalLabel: 'حجم کل:',
+                cubicMeter: 'متر مکعب',
+                copyText: 'کپی',
+                copiedText: 'کپی شد!',
+                summaryTitle: 'خلاصه حجم بر اساس پیگیری',
+                summaryTrack: 'شماره پیگیری',
+                summaryCount: 'تعداد جعبه',
+                summaryVolume: 'حجم کل (متر³)',
+                summaryCopy: 'کپی',
+                listTitle: 'لیست جعبه‌ها',
+                listTrack: 'شماره پیگیری',
+                listDim1: 'بعد 1 (متر)',
+                listDim2: 'بعد 2 (متر)',
+                listDim3: 'بعد 3 (متر)',
+                listVolume: 'حجم (متر³)',
+                listAction: 'عملیات',
+                deleteText: 'حذف',
+                confirmClear: 'آیا مطمئن هستید که می‌خواهید همه داده‌ها را پاک کنید؟',
+                placeholderTrack: 'شماره پیگیری را وارد کنید',
+                placeholderDim1: 'بعد اول',
+                placeholderDim2: 'بعد دوم',
+                placeholderDim3: 'بعد سوم',
+                errorInput: 'لطفاً برای همه فیلدها اعداد معتبر وارد کنید',
+                errorTrack: 'لطفاً شماره پیگیری را وارد کنید',
+                // بۆ ژمارەی کارتۆن
+                count: 'تعداد جعبه:',
+                listCount: 'تعداد',
+                placeholderCount: 'تعداد جعبه‌ها',
+                // بۆ کێش
+                weight: 'وزن (کیلوگرم):',
+                listWeight: 'وزن (کیلوگرم)',
+                placeholderWeight: 'وزن جعبه',
+                totalWeightLabel: 'وزن کل:',
+                weightUnit: 'کیلوگرم',
+                summaryWeight: 'وزن (کیلوگرم)'
             }
         };
         
-        // بارکردنی داتا لە local storage ئەگەر هەبوو
-        window.onload = function() {
-            // Load saved language if available
-            const savedLanguage = localStorage.getItem('boxCalculatorLanguage');
-            if (savedLanguage) {
-                currentLanguage = savedLanguage;
-                document.getElementById('languageSelector').value = currentLanguage;
-            }
-            
-            updateLanguage();
-            loadData();
-            // خۆکار سڕینەوەی داتا دوای 1 کاتژمێر
-            checkDataExpiration();
-        };
+        // زمانی بنەڕەتی
+        let currentLang = 'ku';
         
-        // Change language function
+        // گۆڕینی زمان
         function changeLanguage() {
-            currentLanguage = document.getElementById('languageSelector').value;
-            localStorage.setItem('boxCalculatorLanguage', currentLanguage);
-            updateLanguage();
-        }
-        
-        // Update UI with selected language
-        function updateLanguage() {
-            const t = translations[currentLanguage];
-            document.documentElement.setAttribute('lang', currentLanguage);
-            document.documentElement.setAttribute('dir', t.dir);
-            document.title = t.title;
+            const langSelect = document.getElementById('langSelect');
+            currentLang = langSelect.value;
             
-            // Update main elements
-            document.getElementById('mainTitle').textContent = t.mainTitle;
+            const lang = languages[currentLang];
             
-            // Update labels
-            document.getElementById('label-trackNumber').textContent = t.trackNumber;
-            document.getElementById('label-width').textContent = t.width;
-            document.getElementById('label-length').textContent = t.length;
-            document.getElementById('label-depth').textContent = t.depth;
+            // گۆڕینی جیهەت
+            document.getElementById('app-body').dir = lang.dir;
+            if (lang.dir === 'ltr') {
+                document.getElementById('app-body').classList.add('ltr');
+            } else {
+                document.getElementById('app-body').classList.remove('ltr');
+            }
             
-            // Update placeholders
-            document.getElementById('trackNumber').placeholder = t.trackNumberPlaceholder;
-            document.getElementById('width').placeholder = t.widthPlaceholder;
-            document.getElementById('length').placeholder = t.lengthPlaceholder;
-            document.getElementById('depth').placeholder = t.depthPlaceholder;
+            // گۆڕینی ناونیشان
+            document.getElementById('app-title').textContent = lang.title;
+            document.getElementById('app-subtitle').textContent = lang.subtitle;
             
-            // Update buttons
-            document.getElementById('btn-calculate').textContent = t.calculate;
-            document.getElementById('btn-add').textContent = t.addToList;
-            document.getElementById('btn-clear').textContent = t.clearAll;
+            // گۆڕینی لەیبڵەکان
+            document.getElementById('label-track').textContent = lang.trackNumber;
+            document.getElementById('label-dim1').textContent = lang.dim1;
+            document.getElementById('label-dim2').textContent = lang.dim2;
+            document.getElementById('label-dim3').textContent = lang.dim3;
+            document.getElementById('label-count').textContent = lang.count;
+            document.getElementById('label-weight').textContent = lang.weight;
             
-            // Update result texts
-            document.getElementById('result-text').textContent = t.resultText;
-            document.getElementById('cubic-meter').textContent = t.cubicMeter;
-            document.getElementById('total-volume-text').textContent = t.totalVolumeText;
-            document.getElementById('total-cubic-meter').textContent = t.cubicMeter;
+            // گۆڕینی دوگمەکان
+            document.getElementById('btn-calculate').textContent = lang.calculateBtn;
+            document.getElementById('btn-add').textContent = lang.addBtn;
+            document.getElementById('btn-clear').textContent = lang.clearBtn;
             
-            // Update table headers
-            document.getElementById('summary-title').textContent = t.summaryTitle;
-            document.getElementById('th-track-number').textContent = t.thTrackNumber;
-            document.getElementById('th-box-count').textContent = t.thBoxCount;
-            document.getElementById('th-total-volume').textContent = t.thTotalVolume;
-            document.getElementById('th-copy').textContent = t.thCopy;
+            // گۆڕینی پلەیسهۆڵدەرەکان
+            document.getElementById('trackNumber').placeholder = lang.placeholderTrack;
+            document.getElementById('dim1').placeholder = lang.placeholderDim1;
+            document.getElementById('dim2').placeholder = lang.placeholderDim2;
+            document.getElementById('dim3').placeholder = lang.placeholderDim3;
+            document.getElementById('boxCount').placeholder = lang.placeholderCount;
+            document.getElementById('weight').placeholder = lang.placeholderWeight;
             
-            document.getElementById('box-list-title').textContent = t.boxListTitle;
-            document.getElementById('th-track').textContent = t.thTrack;
-            document.getElementById('th-width').textContent = t.thWidth;
-            document.getElementById('th-length').textContent = t.thLength;
-            document.getElementById('th-depth').textContent = t.thDepth;
-            document.getElementById('th-volume').textContent = t.thVolume;
-            document.getElementById('th-action').textContent = t.thAction;
+            // گۆڕینی ئەنجام
+            document.getElementById('result-label').textContent = lang.resultLabel;
+            document.getElementById('cubic-meter').textContent = lang.cubicMeter;
             
-            // Update all delete buttons
-            const deleteButtons = document.querySelectorAll('.btn-danger');
-            deleteButtons.forEach(btn => {
-                if (btn.id !== 'btn-clear') {
-                    btn.textContent = t.deleteBtn;
-                }
-            });
+            // گۆڕینی کۆی گشتی
+            document.getElementById('total-label').textContent = lang.totalLabel;
+            document.getElementById('total-cubic-meter').textContent = lang.cubicMeter;
+            document.getElementById('copy-text').textContent = lang.copyText;
+            document.getElementById('total-weight-label').textContent = lang.totalWeightLabel;
+            document.getElementById('total-weight-unit').textContent = lang.weightUnit;
             
-            // Update all copy buttons
-            const copyButtons = document.querySelectorAll('.copy-btn');
-            copyButtons.forEach(btn => {
-                const span = btn.querySelector('.copy-text');
-                if (span) {
-                    span.textContent = t.copyBtn;
-                }
-            });
+            // گۆڕینی پوختە
+            document.getElementById('summary-title').textContent = lang.summaryTitle;
+            document.getElementById('summary-track').textContent = lang.summaryTrack;
+            document.getElementById('summary-count').textContent = lang.summaryCount;
+            document.getElementById('summary-volume').textContent = lang.summaryVolume;
+            document.getElementById('summary-weight').textContent = lang.summaryWeight;
+            document.getElementById('summary-copy').textContent = lang.summaryCopy;
             
-            // Redraw tables to apply language changes
+            // گۆڕینی لیست
+            document.getElementById('list-title').textContent = lang.listTitle;
+            document.getElementById('list-track').textContent = lang.listTrack;
+            document.getElementById('list-dim1').textContent = lang.listDim1;
+            document.getElementById('list-dim2').textContent = lang.listDim2;
+            document.getElementById('list-dim3').textContent = lang.listDim3;
+            document.getElementById('list-count').textContent = lang.listCount;
+            document.getElementById('list-volume').textContent = lang.listVolume;
+            document.getElementById('list-weight').textContent = lang.listWeight;
+            document.getElementById('list-action').textContent = lang.listAction;
+            
+            // نوێکردنەوەی لیستەکان
             updateBoxList();
             updateTrackSummary();
         }
         
+        // بارکردنی داتا لە local storage ئەگەر هەبوو
+        window.onload = function() {
+            loadData();
+            // خۆکار سڕینەوەی داتا دوای 1 کاتژمێر
+            checkDataExpiration();
+            // دانانی پلەیسهۆڵدەرەکان
+            setPlaceholders();
+        };
+        
+        // دانانی پلەیسهۆڵدەرەکان بەپێی زمان
+        function setPlaceholders() {
+            const lang = languages[currentLang];
+            document.getElementById('trackNumber').placeholder = lang.placeholderTrack;
+            document.getElementById('dim1').placeholder = lang.placeholderDim1;
+            document.getElementById('dim2').placeholder = lang.placeholderDim2;
+            document.getElementById('dim3').placeholder = lang.placeholderDim3;
+            document.getElementById('boxCount').placeholder = lang.placeholderCount;
+            document.getElementById('weight').placeholder = lang.placeholderWeight;
+        }
+        
         // بۆ ژمێرکاری قەبارەی کارتۆن
         function calculateVolume() {
-            const width = parseFloat(document.getElementById('width').value);
-            const length = parseFloat(document.getElementById('length').value);
-            const depth = parseFloat(document.getElementById('depth').value);
+            const dim1 = parseFloat(document.getElementById('dim1').value);
+            const dim2 = parseFloat(document.getElementById('dim2').value);
+            const dim3 = parseFloat(document.getElementById('dim3').value);
+            const boxCount = parseInt(document.getElementById('boxCount').value) || 1;
             
-            if (isNaN(width) || isNaN(length) || isNaN(depth)) {
-                alert(translations[currentLanguage].invalidInput);
+            if (isNaN(dim1) || isNaN(dim2) || isNaN(dim3)) {
+                alert(languages[currentLang].errorInput);
                 return;
             }
             
-            const volume = width * length * depth;
-            document.getElementById('volume').textContent = volume.toFixed(3);
+            // ئەنجامدانی لێکدان بە ڕیزبەندکردنی ژمارەکان (بۆ چارەسەری گۆڕینی درێژی، پانی و قوڵی)
+            const dimensions = [dim1, dim2, dim3].sort((a, b) => b - a);
+            // حیسابکردنی قەبارەی یەک کارتۆن
+            const singleVolume = dimensions[0] * dimensions[1] * dimensions[2];
+            // لێکدانی قەبارە لە ژمارەی کارتۆنەکان
+            const totalVolume = singleVolume * boxCount;
+            
+            // دەرخستنی قەبارەی کۆی گشتی هەموو کارتۆنەکان
+            document.getElementById('volume').textContent = totalVolume.toFixed(3);
             document.getElementById('result').style.display = 'block';
         }
         
         // بۆ زیادکردنی کارتۆن بۆ لیست
         function addToList() {
             const trackNumber = document.getElementById('trackNumber').value;
-            const width = parseFloat(document.getElementById('width').value);
-            const length = parseFloat(document.getElementById('length').value);
-            const depth = parseFloat(document.getElementById('depth').value);
+            const dim1 = parseFloat(document.getElementById('dim1').value);
+            const dim2 = parseFloat(document.getElementById('dim2').value);
+            const dim3 = parseFloat(document.getElementById('dim3').value);
+            const boxCount = parseInt(document.getElementById('boxCount').value) || 1;
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
             
-            if (isNaN(width) || isNaN(length) || isNaN(depth)) {
-                alert(translations[currentLanguage].invalidInput);
+            if (isNaN(dim1) || isNaN(dim2) || isNaN(dim3)) {
+                alert(languages[currentLang].errorInput);
                 return;
             }
             
             if (!trackNumber) {
-                alert(translations[currentLanguage].noTrackNumber);
+                alert(languages[currentLang].errorTrack);
                 return;
             }
             
-            const volume = width * length * depth;
+            // ڕیزبەندکردنی پێوانەکان (بۆ چارەسەری گۆڕینی درێژی، پانی و قوڵی)
+            const dimensions = [dim1, dim2, dim3].sort((a, b) => b - a);
+            // حیسابکردنی قەبارەی یەک کارتۆن
+            const singleVolume = dimensions[0] * dimensions[1] * dimensions[2];
+            // حیسابکردنی قەبارەی کۆی گشتی هەموو کارتۆنەکان
+            const totalVolume = singleVolume * boxCount;
+            
+            // حیسابکردنی کێشی کۆی گشتی
+            const totalWeight = weight * boxCount;
             
             // زیادکردنی کارتۆن بۆ ئەڕەی
             const box = {
                 trackNumber: trackNumber,
-                width: width,
-                length: length,
-                depth: depth,
-                volume: volume
+                dim1: dimensions[0],
+                dim2: dimensions[1],
+                dim3: dimensions[2],
+                singleVolume: singleVolume,
+                boxCount: boxCount,
+                totalVolume: totalVolume,
+                weight: weight,
+                totalWeight: totalWeight
             };
             
             boxes.push(box);
@@ -753,42 +851,15 @@
             updateTrackSummary();
             
             // پاککردنەوەی فۆرمەکە
-            document.getElementById('width').value = '';
-            document.getElementById('length').value = '';
-            document.getElementById('depth').value = '';
+            document.getElementById('dim1').value = '';
+            document.getElementById('dim2').value = '';
+            document.getElementById('dim3').value = '';
+            document.getElementById('boxCount').value = '1';
+            document.getElementById('weight').value = '';
             document.getElementById('result').style.display = 'none';
             
-            // فۆکوس بکە لە پانی
-            document.getElementById('width').focus();
-        }
-        
-        // بۆ نوێکردنەوەی خشتەی کارتۆنەکان
-        function updateBoxList() {
-            const tableBody = document.getElementById('boxListBody');
-            
-            // پاککردنەوەی خشتە
-            tableBody.innerHTML = '';
-            
-            // زیادکردنی ڕیزی نوێ بۆ هەر کارتۆنێک
-            boxes.forEach((box, index) => {
-                const row = document.createElement('tr');
-                
-                row.innerHTML = `
-                    <td>${box.trackNumber}</td>
-                    <td>${box.width.toFixed(2)}</td>
-                    <td>${box.length.toFixed(2)}</td>
-                    <td>${box.depth.toFixed(2)}</td>
-                    <td>${box.volume.toFixed(3)}</td>
-                    <td>
-                        <button class="btn-danger" onclick="deleteBox(${index})">${translations[currentLanguage].deleteBtn}</button>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-            
-            // پاشەکەوتکردنی داتا
-            saveData();
+            // فۆکوس بکە لە پیوانە 1
+            document.getElementById('dim1').focus();
         }
         
         // نوێکردنەوەی پوختەی تراک
@@ -803,12 +874,16 @@
                 if (!trackGroups[box.trackNumber]) {
                     trackGroups[box.trackNumber] = {
                         count: 0,
-                        totalVolume: 0
+                        totalBoxCount: 0,
+                        totalVolume: 0,
+                        totalWeight: 0
                     };
                 }
                 
                 trackGroups[box.trackNumber].count++;
-                trackGroups[box.trackNumber].totalVolume += box.volume;
+                trackGroups[box.trackNumber].totalBoxCount += box.boxCount;
+                trackGroups[box.trackNumber].totalVolume += box.totalVolume;
+                trackGroups[box.trackNumber].totalWeight += box.totalWeight;
             });
             
             // ئەگەر هیچ داتایەک نەبوو
@@ -829,27 +904,14 @@
                 
                 row.innerHTML = `
                     <td>${track}</td>
-                    <td>${trackGroups[track].count}</td>
+                    <td>${trackGroups[track].totalBoxCount}</td>
                     <td>${trackGroups[track].totalVolume.toFixed(3)}</td>
-                    <td><button class="copy-btn" onclick="copyText('${trackGroups[track].totalVolume.toFixed(3)}')"><span class="copy-text">${translations[currentLanguage].copyBtn}</span></button></td>
+                    <td>${trackGroups[track].totalWeight.toFixed(2)} ${languages[currentLang].weightUnit}</td>
+                    <td><button class="copy-btn" onclick="copyText('${trackGroups[track].totalVolume.toFixed(3)}')"><span class="copy-text">${languages[currentLang].copyText}</span></button></td>
                 `;
                 
                 summaryBody.appendChild(row);
             }
-        }
-        
-        // سڕینەوەی کارتۆن
-        function deleteBox(index) {
-            boxes.splice(index, 1);
-            updateBoxList();
-            updateTotalVolume();
-            updateTrackSummary();
-        }
-        
-        // نوێکردنەوەی کۆی گشتی قەبارە
-        function updateTotalVolume() {
-            const total = boxes.reduce((sum, box) => sum + box.volume, 0);
-            document.getElementById('totalVolume').textContent = total.toFixed(3);
         }
         
         // بۆ کۆپی کردنی ئەنجام
@@ -859,18 +921,18 @@
                 const buttons = document.querySelectorAll('.copy-btn');
                 buttons.forEach(btn => {
                     const span = btn.querySelector('.copy-text');
-                    span.textContent = translations[currentLanguage].copyBtn;
+                    span.textContent = languages[currentLang].copyText;
                     btn.classList.remove('copy-success');
                 });
                 
                 event.target.parentElement.classList.add('copy-success');
                 const span = event.target.querySelector('.copy-text') || event.target;
-                span.textContent = translations[currentLanguage].copiedBtn;
+                span.textContent = languages[currentLang].copiedText;
                 
                 setTimeout(function() {
                     if (event.target.classList.contains('copy-success')) {
                         event.target.classList.remove('copy-success');
-                        span.textContent = translations[currentLanguage].copyBtn;
+                        span.textContent = languages[currentLang].copyText;
                     }
                 }, 2000);
             });
@@ -936,7 +998,7 @@
         
         // بۆ سڕینەوەی هەموو داتا بە دەستی
         function clearAllData() {
-            if (confirm(translations[currentLanguage].confirmClear)) {
+            if (confirm(languages[currentLang].confirmClear)) {
                 localStorage.removeItem('boxCalculatorData');
                 boxes = [];
                 updateBoxList();
@@ -945,12 +1007,66 @@
             }
         }
         
+        // نوێکردنەوەی داتا لە local storage دوای هەر گۆڕانکارییەک
+        function updateBoxList() {
+            const tableBody = document.getElementById('boxListBody');
+            
+            // پاککردنەوەی خشتە
+            tableBody.innerHTML = '';
+            
+            // زیادکردنی ڕیزی نوێ بۆ هەر کارتۆنێک
+            boxes.forEach((box, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${box.trackNumber}</td>
+                    <td>${box.dim1.toFixed(2)}</td>
+                    <td>${box.dim2.toFixed(2)}</td>
+                    <td>${box.dim3.toFixed(2)}</td>
+                    <td>${box.boxCount}</td>
+                    <td>${box.totalVolume.toFixed(3)}</td>
+                    <td>${box.weight > 0 ? box.totalWeight.toFixed(2) + ' ' + languages[currentLang].weightUnit : '-'}</td>
+                    <td>
+                        <button class="btn-danger" onclick="deleteBox(${index})">${languages[currentLang].deleteText}</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // پاشەکەوتکردنی داتا
+            saveData();
+        }
+        
+        // نوێکردنەوەی کۆی گشتی قەبارە
+        function updateTotalVolume() {
+            const totalVolume = boxes.reduce((sum, box) => sum + box.totalVolume, 0);
+            const totalWeight = boxes.reduce((sum, box) => sum + box.totalWeight, 0);
+            
+            document.getElementById('totalVolume').textContent = totalVolume.toFixed(3);
+            document.getElementById('totalWeight').textContent = totalWeight.toFixed(2);
+        }
+        
+        // سڕینەوەی کارتۆن
+        function deleteBox(index) {
+            boxes.splice(index, 1);
+            updateBoxList();
+            updateTotalVolume();
+            updateTrackSummary();
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             const inputFields = document.querySelectorAll('input[type="number"]');
             
             inputFields.forEach(input => {
                 input.setAttribute('inputmode', 'decimal');
             });
+            
+            // دانانی ژمارەی کارتۆن بۆ 1 بە شێوەی بنەڕەتی
+            document.getElementById('boxCount').value = '1';
+            
+            // گۆڕینی زمان بۆ بنەڕەتی
+            changeLanguage();
         });
     </script>
 </body>
