@@ -3,6 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- دامەزراندنی Firebase -->
+<script>
+    // زانیاری پەیوەندی کردن بە Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5Gn6UbNeG8o7-0Bh3G9rU7AHmomIxZE4",
+      authDomain: "boxcounter-a4ea9.firebaseapp.com",
+      projectId: "boxcounter-a4ea9",
+      storageBucket: "boxcounter-a4ea9.firebasestorage.app",
+      messagingSenderId: "476071523098",
+      appId: "1:476071523098:web:5e7b9b7cb2f32b3290f2a3",
+      measurementId: "G-2QH7BGZG7G"
+    };
+    
+    // دامەزراندنی Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    // دروستکردنی پەیوەندی بە Firestore
+    const db = firebase.firestore();
+  </script>
     <title>کۆمپانیای لوتکەی شاهۆ - حاسبەی قەبارەی کارتۆن</title>
     <style>
         :root {
@@ -358,6 +380,7 @@
         }
     </style>
 </head>
+
 <body id="app-body">
     <div class="lang-switcher">
         <select id="langSelect" class="lang-select" onchange="changeLanguage()">
@@ -475,6 +498,7 @@
             </div>
         </div>
     </div>
+
     <script>
         // بۆ پاراستنی داتا
         let boxes = [];
@@ -617,457 +641,482 @@
                 count: 'عدد الصناديق:',
                 listCount: 'العدد',
                 placeholderCount: 'عدد الصناديق',
-                // بۆ کێش
                 weight: 'الوزن (كجم):',
-                listWeight: 'الوزن (كجم)',
-                placeholderWeight: 'وزن الصندوق',
-                totalWeightLabel: 'إجمالي الوزن:',
-                weightUnit: 'كجم',
-                summaryWeight: 'الوزن (كجم)'
-            },
-            fa: {
-                dir: 'rtl',
-                title: 'شرکت لوتکای شاهو',
-                subtitle: 'محاسبه‌گر حجم جعبه',
-                trackNumber: 'شماره پیگیری:',
-                dim1: 'بعد 1 (متر):',
-                dim2: 'بعد 2 (متر):',
-                dim3: 'بعد 3 (متر):',
-                calculateBtn: 'محاسبه حجم',
-                addBtn: 'افزودن به لیست',
-                clearBtn: 'پاک کردن همه',
-                resultLabel: 'حجم:',
-                totalLabel: 'حجم کل:',
-                cubicMeter: 'متر مکعب',
-                copyText: 'کپی',
-                copiedText: 'کپی شد!',
-                summaryTitle: 'خلاصه حجم بر اساس پیگیری',
-                summaryTrack: 'شماره پیگیری',
-                summaryCount: 'تعداد جعبه',
-                summaryVolume: 'حجم کل (متر³)',
-                summaryCopy: 'کپی',
-                listTitle: 'لیست جعبه‌ها',
-                listTrack: 'شماره پیگیری',
-                listDim1: 'بعد 1 (متر)',
-                listDim2: 'بعد 2 (متر)',
-                listDim3: 'بعد 3 (متر)',
-                listVolume: 'حجم (متر³)',
-                listAction: 'عملیات',
-                deleteText: 'حذف',
-                confirmClear: 'آیا مطمئن هستید که می‌خواهید همه داده‌ها را پاک کنید؟',
-                placeholderTrack: 'شماره پیگیری را وارد کنید',
-                placeholderDim1: 'بعد اول',
-                placeholderDim2: 'بعد دوم',
-                placeholderDim3: 'بعد سوم',
-                errorInput: 'لطفاً برای همه فیلدها اعداد معتبر وارد کنید',
-                errorTrack: 'لطفاً شماره پیگیری را وارد کنید',
-                // بۆ ژمارەی کارتۆن
-                count: 'تعداد جعبه:',
-                listCount: 'تعداد',
-                placeholderCount: 'تعداد جعبه‌ها',
-                // بۆ کێش
-                weight: 'وزن (کیلوگرم):',
-                listWeight: 'وزن (کیلوگرم)',
-                placeholderWeight: 'وزن جعبه',
-                totalWeightLabel: 'وزن کل:',
-                weightUnit: 'کیلوگرم',
-                summaryWeight: 'وزن (کیلوگرم)'
-            }
-        };
+            listWeight: 'الوزن (كجم)',
+            placeholderWeight: 'وزن الصندوق',
+            totalWeightLabel: 'إجمالي الوزن:',
+            weightUnit: 'كجم',
+            summaryWeight: 'الوزن (كجم)'
+        },
+        fa: {
+            dir: 'rtl',
+            title: 'شرکت لوتکای شاهو',
+            subtitle: 'محاسبه‌گر حجم جعبه',
+            trackNumber: 'شماره پیگیری:',
+            dim1: 'بعد 1 (متر):',
+            dim2: 'بعد 2 (متر):',
+            dim3: 'بعد 3 (متر):',
+            calculateBtn: 'محاسبه حجم',
+            addBtn: 'افزودن به لیست',
+            clearBtn: 'پاک کردن همه',
+            resultLabel: 'حجم:',
+            totalLabel: 'حجم کل:',
+            cubicMeter: 'متر مکعب',
+            copyText: 'کپی',
+            copiedText: 'کپی شد!',
+            summaryTitle: 'خلاصه حجم بر اساس پیگیری',
+            summaryTrack: 'شماره پیگیری',
+            summaryCount: 'تعداد جعبه',
+            summaryVolume: 'حجم کل (متر³)',
+            summaryCopy: 'کپی',
+            listTitle: 'لیست جعبه‌ها',
+            listTrack: 'شماره پیگیری',
+            listDim1: 'بعد 1 (متر)',
+            listDim2: 'بعد 2 (متر)',
+            listDim3: 'بعد 3 (متر)',
+            listVolume: 'حجم (متر³)',
+            listAction: 'عملیات',
+            deleteText: 'حذف',
+            confirmClear: 'آیا مطمئن هستید که می‌خواهید همه داده‌ها را پاک کنید؟',
+            placeholderTrack: 'شماره پیگیری را وارد کنید',
+            placeholderDim1: 'بعد اول',
+            placeholderDim2: 'بعد دوم',
+            placeholderDim3: 'بعد سوم',
+            errorInput: 'لطفاً برای همه فیلدها اعداد معتبر وارد کنید',
+            errorTrack: 'لطفاً شماره پیگیری را وارد کنید',
+            // بۆ ژمارەی کارتۆن
+            count: 'تعداد جعبه:',
+            listCount: 'تعداد',
+            placeholderCount: 'تعداد جعبه‌ها',
+            // بۆ کێش
+            weight: 'وزن (کیلوگرم):',
+            listWeight: 'وزن (کیلوگرم)',
+            placeholderWeight: 'وزن جعبه',
+            totalWeightLabel: 'وزن کل:',
+            weightUnit: 'کیلوگرم',
+            summaryWeight: 'وزن (کیلوگرم)'
+        }
+    };
+    
+    // زمانی بنەڕەتی
+    let currentLang = 'ku';
+
+    // گۆڕینی زمان
+    function changeLanguage() {
+        const langSelect = document.getElementById('langSelect');
+        currentLang = langSelect.value;
         
-        // زمانی بنەڕەتی
-        let currentLang = 'ku';
+        const lang = languages[currentLang];
         
-        // گۆڕینی زمان
-        function changeLanguage() {
-            const langSelect = document.getElementById('langSelect');
-            currentLang = langSelect.value;
-            
-            const lang = languages[currentLang];
-            
-            // گۆڕینی جیهەت
-            document.getElementById('app-body').dir = lang.dir;
-            if (lang.dir === 'ltr') {
-                document.getElementById('app-body').classList.add('ltr');
-            } else {
-                document.getElementById('app-body').classList.remove('ltr');
-            }
-            
-            // گۆڕینی ناونیشان
-            document.getElementById('app-title').textContent = lang.title;
-            document.getElementById('app-subtitle').textContent = lang.subtitle;
-            
-            // گۆڕینی لەیبڵەکان
-            document.getElementById('label-track').textContent = lang.trackNumber;
-            document.getElementById('label-dim1').textContent = lang.dim1;
-            document.getElementById('label-dim2').textContent = lang.dim2;
-            document.getElementById('label-dim3').textContent = lang.dim3;
-            document.getElementById('label-count').textContent = lang.count;
-            document.getElementById('label-weight').textContent = lang.weight;
-            
-            // گۆڕینی دوگمەکان
-            document.getElementById('btn-calculate').textContent = lang.calculateBtn;
-            document.getElementById('btn-add').textContent = lang.addBtn;
-            document.getElementById('btn-clear').textContent = lang.clearBtn;
-            
-            // گۆڕینی پلەیسهۆڵدەرەکان
-            document.getElementById('trackNumber').placeholder = lang.placeholderTrack;
-            document.getElementById('dim1').placeholder = lang.placeholderDim1;
-            document.getElementById('dim2').placeholder = lang.placeholderDim2;
-            document.getElementById('dim3').placeholder = lang.placeholderDim3;
-            document.getElementById('boxCount').placeholder = lang.placeholderCount;
-            document.getElementById('weight').placeholder = lang.placeholderWeight;
-            
-            // گۆڕینی ئەنجام
-            document.getElementById('result-label').textContent = lang.resultLabel;
-            document.getElementById('cubic-meter').textContent = lang.cubicMeter;
-            
-            // گۆڕینی کۆی گشتی
-            document.getElementById('total-label').textContent = lang.totalLabel;
-            document.getElementById('total-cubic-meter').textContent = lang.cubicMeter;
-            document.getElementById('copy-text').textContent = lang.copyText;
-            document.getElementById('total-weight-label').textContent = lang.totalWeightLabel;
-            document.getElementById('total-weight-unit').textContent = lang.weightUnit;
-            
-            // گۆڕینی پوختە
-            document.getElementById('summary-title').textContent = lang.summaryTitle;
-            document.getElementById('summary-track').textContent = lang.summaryTrack;
-            document.getElementById('summary-count').textContent = lang.summaryCount;
-            document.getElementById('summary-volume').textContent = lang.summaryVolume;
-            document.getElementById('summary-weight').textContent = lang.summaryWeight;
-            document.getElementById('summary-copy').textContent = lang.summaryCopy;
-            
-            // گۆڕینی لیست
-            document.getElementById('list-title').textContent = lang.listTitle;
-            document.getElementById('list-track').textContent = lang.listTrack;
-            document.getElementById('list-dim1').textContent = lang.listDim1;
-            document.getElementById('list-dim2').textContent = lang.listDim2;
-            document.getElementById('list-dim3').textContent = lang.listDim3;
-            document.getElementById('list-count').textContent = lang.listCount;
-            document.getElementById('list-volume').textContent = lang.listVolume;
-            document.getElementById('list-weight').textContent = lang.listWeight;
-            document.getElementById('list-action').textContent = lang.listAction;
-            
-            // نوێکردنەوەی لیستەکان
-            updateBoxList();
-            updateTrackSummary();
+        // گۆڕینی جیهەت
+        document.getElementById('app-body').dir = lang.dir;
+        if (lang.dir === 'ltr') {
+            document.getElementById('app-body').classList.add('ltr');
+        } else {
+            document.getElementById('app-body').classList.remove('ltr');
         }
         
-        // بارکردنی داتا لە local storage ئەگەر هەبوو
-        window.onload = function() {
-            loadData();
-            // خۆکار سڕینەوەی داتا دوای 1 کاتژمێر
-            checkDataExpiration();
-            // دانانی پلەیسهۆڵدەرەکان
-            setPlaceholders();
-        };
+        // گۆڕینی ناونیشان
+        document.getElementById('app-title').textContent = lang.title;
+        document.getElementById('app-subtitle').textContent = lang.subtitle;
         
-        // دانانی پلەیسهۆڵدەرەکان بەپێی زمان
-        function setPlaceholders() {
-            const lang = languages[currentLang];
-            document.getElementById('trackNumber').placeholder = lang.placeholderTrack;
-            document.getElementById('dim1').placeholder = lang.placeholderDim1;
-            document.getElementById('dim2').placeholder = lang.placeholderDim2;
-            document.getElementById('dim3').placeholder = lang.placeholderDim3;
-            document.getElementById('boxCount').placeholder = lang.placeholderCount;
-            document.getElementById('weight').placeholder = lang.placeholderWeight;
-        }
+        // گۆڕینی لەیبڵەکان
+        document.getElementById('label-track').textContent = lang.trackNumber;
+        document.getElementById('label-dim1').textContent = lang.dim1;
+        document.getElementById('label-dim2').textContent = lang.dim2;
+        document.getElementById('label-dim3').textContent = lang.dim3;
+        document.getElementById('label-count').textContent = lang.count;
+        document.getElementById('label-weight').textContent = lang.weight;
         
-        // بۆ ژمێرکاری قەبارەی کارتۆن
-        function calculateVolume() {
-            const dim1 = parseFloat(document.getElementById('dim1').value);
-            const dim2 = parseFloat(document.getElementById('dim2').value);
-            const dim3 = parseFloat(document.getElementById('dim3').value);
-            const boxCount = parseInt(document.getElementById('boxCount').value) || 1;
-            
-            if (isNaN(dim1) || isNaN(dim2) || isNaN(dim3)) {
-                alert(languages[currentLang].errorInput);
-                return;
-            }
-            
-            // ئەنجامدانی لێکدان بە ڕیزبەندکردنی ژمارەکان (بۆ چارەسەری گۆڕینی درێژی، پانی و قوڵی)
-            const dimensions = [dim1, dim2, dim3].sort((a, b) => b - a);
-            // حیسابکردنی قەبارەی یەک کارتۆن
-            const singleVolume = dimensions[0] * dimensions[1] * dimensions[2];
-            // لێکدانی قەبارە لە ژمارەی کارتۆنەکان
-            const totalVolume = singleVolume * boxCount;
-            
-            // دەرخستنی قەبارەی کۆی گشتی هەموو کارتۆنەکان
-            document.getElementById('volume').textContent = totalVolume.toFixed(3);
-            document.getElementById('result').style.display = 'block';
-        }
+        // گۆڕینی دوگمەکان
+        document.getElementById('btn-calculate').textContent = lang.calculateBtn;
+        document.getElementById('btn-add').textContent = lang.addBtn;
+        document.getElementById('btn-clear').textContent = lang.clearBtn;
         
-        // بۆ زیادکردنی کارتۆن بۆ لیست
-        function addToList() {
-            const trackNumber = document.getElementById('trackNumber').value;
-            const dim1 = parseFloat(document.getElementById('dim1').value);
-            const dim2 = parseFloat(document.getElementById('dim2').value);
-            const dim3 = parseFloat(document.getElementById('dim3').value);
-            const boxCount = parseInt(document.getElementById('boxCount').value) || 1;
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            
-            if (isNaN(dim1) || isNaN(dim2) || isNaN(dim3)) {
-                alert(languages[currentLang].errorInput);
-                return;
-            }
-            
-            if (!trackNumber) {
-                alert(languages[currentLang].errorTrack);
-                return;
-            }
-            
-            // ڕیزبەندکردنی پێوانەکان (بۆ چارەسەری گۆڕینی درێژی، پانی و قوڵی)
-            const dimensions = [dim1, dim2, dim3].sort((a, b) => b - a);
-            // حیسابکردنی قەبارەی یەک کارتۆن
-            const singleVolume = dimensions[0] * dimensions[1] * dimensions[2];
-            // حیسابکردنی قەبارەی کۆی گشتی هەموو کارتۆنەکان
-            const totalVolume = singleVolume * boxCount;
-            
-            // حیسابکردنی کێشی کۆی گشتی
-            const totalWeight = weight * boxCount;
-            
-            // زیادکردنی کارتۆن بۆ ئەڕەی
-            const box = {
-                trackNumber: trackNumber,
-                dim1: dimensions[0],
-                dim2: dimensions[1],
-                dim3: dimensions[2],
-                singleVolume: singleVolume,
-                boxCount: boxCount,
-                totalVolume: totalVolume,
-                weight: weight,
-                totalWeight: totalWeight
-            };
-            
-            boxes.push(box);
-            
-            // نوێکردنەوەی خشتەکە
-            updateBoxList();
-            
-            // نوێکردنەوەی کۆی گشتی
-            updateTotalVolume();
-            
-            // نوێکردنەوەی پوختەی تراک
-            updateTrackSummary();
-            
-            // پاککردنەوەی فۆرمەکە
-            document.getElementById('dim1').value = '';
-            document.getElementById('dim2').value = '';
-            document.getElementById('dim3').value = '';
-            document.getElementById('boxCount').value = '1';
-            document.getElementById('weight').value = '';
-            document.getElementById('result').style.display = 'none';
-            
-            // فۆکوس بکە لە پیوانە 1
-            document.getElementById('dim1').focus();
-        }
+        // گۆڕینی پلەیسهۆڵدەرەکان
+        document.getElementById('trackNumber').placeholder = lang.placeholderTrack;
+        document.getElementById('dim1').placeholder = lang.placeholderDim1;
+        document.getElementById('dim2').placeholder = lang.placeholderDim2;
+        document.getElementById('dim3').placeholder = lang.placeholderDim3;
+        document.getElementById('boxCount').placeholder = lang.placeholderCount;
+        document.getElementById('weight').placeholder = lang.placeholderWeight;
         
-        // نوێکردنەوەی پوختەی تراک
-        function updateTrackSummary() {
-            const summarySection = document.getElementById('summarySection');
-            const summaryBody = document.getElementById('summaryBody');
-            
-            // گرووپ کردنی کارتۆنەکان بەپێی تراک
-            const trackGroups = {};
-            
-            boxes.forEach(box => {
-                if (!trackGroups[box.trackNumber]) {
-                    trackGroups[box.trackNumber] = {
-                        count: 0,
-                        totalBoxCount: 0,
-                        totalVolume: 0,
-                        totalWeight: 0
-                    };
-                }
-                
-                trackGroups[box.trackNumber].count++;
-                trackGroups[box.trackNumber].totalBoxCount += box.boxCount;
-                trackGroups[box.trackNumber].totalVolume += box.totalVolume;
-                trackGroups[box.trackNumber].totalWeight += box.totalWeight;
-            });
-            
-            // ئەگەر هیچ داتایەک نەبوو
-            if (Object.keys(trackGroups).length === 0) {
-                summarySection.style.display = 'none';
-                return;
-            }
-            
-            // نیشاندانی بەشی پوختە
-            summarySection.style.display = 'block';
-            
-            // پاککردنەوەی خشتە
-            summaryBody.innerHTML = '';
-            
-            // زیادکردنی ڕیزەکان
-            for (const track in trackGroups) {
-                const row = document.createElement('tr');
-                
-                row.innerHTML = `
-                    <td>${track}</td>
-                    <td>${trackGroups[track].totalBoxCount}</td>
-                    <td>${trackGroups[track].totalVolume.toFixed(3)}</td>
-                    <td>${trackGroups[track].totalWeight.toFixed(2)} ${languages[currentLang].weightUnit}</td>
-                    <td><button class="copy-btn" onclick="copyText('${trackGroups[track].totalVolume.toFixed(3)}')"><span class="copy-text">${languages[currentLang].copyText}</span></button></td>
-                `;
-                
-                summaryBody.appendChild(row);
-            }
-        }
+        // گۆڕینی ئەنجام
+        document.getElementById('result-label').textContent = lang.resultLabel;
+        document.getElementById('cubic-meter').textContent = lang.cubicMeter;
         
-        // بۆ کۆپی کردنی ئەنجام
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(function() {
-                // دەستکەوتنی کۆپی
-                const buttons = document.querySelectorAll('.copy-btn');
-                buttons.forEach(btn => {
-                    const span = btn.querySelector('.copy-text');
-                    span.textContent = languages[currentLang].copyText;
-                    btn.classList.remove('copy-success');
+        // گۆڕینی کۆی گشتی
+        document.getElementById('total-label').textContent = lang.totalLabel;
+        document.getElementById('total-cubic-meter').textContent = lang.cubicMeter;
+        document.getElementById('copy-text').textContent = lang.copyText;
+        document.getElementById('total-weight-label').textContent = lang.totalWeightLabel;
+        document.getElementById('total-weight-unit').textContent = lang.weightUnit;
+        
+        // گۆڕینی پوختە
+        document.getElementById('summary-title').textContent = lang.summaryTitle;
+        document.getElementById('summary-track').textContent = lang.summaryTrack;
+        document.getElementById('summary-count').textContent = lang.summaryCount;
+        document.getElementById('summary-volume').textContent = lang.summaryVolume;
+        document.getElementById('summary-weight').textContent = lang.summaryWeight;
+        document.getElementById('summary-copy').textContent = lang.summaryCopy;
+        
+        // گۆڕینی لیست
+        document.getElementById('list-title').textContent = lang.listTitle;
+        document.getElementById('list-track').textContent = lang.listTrack;
+        document.getElementById('list-dim1').textContent = lang.listDim1;
+        document.getElementById('list-dim2').textContent = lang.listDim2;
+        document.getElementById('list-dim3').textContent = lang.listDim3;
+        document.getElementById('list-count').textContent = lang.listCount;
+        document.getElementById('list-volume').textContent = lang.listVolume;
+        document.getElementById('list-weight').textContent = lang.listWeight;
+        document.getElementById('list-action').textContent = lang.listAction;
+        
+        // نوێکردنەوەی لیستەکان
+        updateBoxList();
+        updateTrackSummary();
+    }
+    
+    // خوێندنەوەی داتا لە Firebase
+    function loadBoxesFromFirebase() {
+        db.collection("boxes")
+            .orderBy("timestamp", "desc")
+            .get()
+            .then(function(querySnapshot) {
+                boxes = [];
+                querySnapshot.forEach(function(doc) {
+                    const data = doc.data();
+                    boxes.push({
+                        id: doc.id,
+                        ...data
+                    });
                 });
                 
-                event.target.parentElement.classList.add('copy-success');
-                const span = event.target.querySelector('.copy-text') || event.target;
-                span.textContent = languages[currentLang].copiedText;
-                
-                setTimeout(function() {
-                    if (event.target.classList.contains('copy-success')) {
-                        event.target.classList.remove('copy-success');
-                        span.textContent = languages[currentLang].copyText;
-                    }
-                }, 2000);
-            });
-        }
-        
-        // بۆ کۆپی کردنی کۆی گشتی
-        function copyTotal() {
-            const total = document.getElementById('totalVolume').textContent;
-            copyText(total);
-        }
-        
-        // پاشەکەوتکردنی داتا لە local storage
-        function saveData() {
-            const now = new Date().getTime();
-            const data = {
-                boxes: boxes,
-                timestamp: now
-            };
-            localStorage.setItem('boxCalculatorData', JSON.stringify(data));
-        }
-        
-        // بارکردنی داتا لە local storage
-        function loadData() {
-            const savedData = localStorage.getItem('boxCalculatorData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                boxes = data.boxes;
                 updateBoxList();
                 updateTotalVolume();
                 updateTrackSummary();
-            }
+            })
+            .catch(function(error) {
+                console.error("Error loading boxes: ", error);
+            });
+    }
+
+    // دانانی پلەیسهۆڵدەرەکان بەپێی زمان
+    function setPlaceholders() {
+        const lang = languages[currentLang];
+        document.getElementById('trackNumber').placeholder = lang.placeholderTrack;
+        document.getElementById('dim1').placeholder = lang.placeholderDim1;
+        document.getElementById('dim2').placeholder = lang.placeholderDim2;
+        document.getElementById('dim3').placeholder = lang.placeholderDim3;
+        document.getElementById('boxCount').placeholder = lang.placeholderCount;
+        document.getElementById('weight').placeholder = lang.placeholderWeight;
+    }
+    
+    // بۆ ژمێرکاری قەبارەی کارتۆن
+    function calculateVolume() {
+        const dim1 = parseFloat(document.getElementById('dim1').value);
+        const dim2 = parseFloat(document.getElementById('dim2').value);
+        const dim3 = parseFloat(document.getElementById('dim3').value);
+        const boxCount = parseInt(document.getElementById('boxCount').value) || 1;
+        
+        if (isNaN(dim1) || isNaN(dim2) || isNaN(dim3)) {
+            alert(languages[currentLang].errorInput);
+            return;
         }
         
-        // پشکنینی بەسەرچوونی داتا
-        function checkDataExpiration() {
-            const savedData = localStorage.getItem('boxCalculatorData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                const now = new Date().getTime();
-                const timeDiff = now - data.timestamp;
+        // ئەنجامدانی لێکدان بە ڕیزبەندکردنی ژمارەکان (بۆ چارەسەری گۆڕینی درێژی، پانی و قوڵی)
+        const dimensions = [dim1, dim2, dim3].sort((a, b) => b - a);
+        // حیسابکردنی قەبارەی یەک کارتۆن
+        const singleVolume = dimensions[0] * dimensions[1] * dimensions[2];
+        // لێکدانی قەبارە لە ژمارەی کارتۆنەکان
+        const totalVolume = singleVolume * boxCount;
+        
+        // دەرخستنی قەبارەی کۆی گشتی هەموو کارتۆنەکان
+        document.getElementById('volume').textContent = totalVolume.toFixed(3);
+        document.getElementById('result').style.display = 'block';
+    }
+
+    // بۆ زیادکردنی کارتۆن بۆ لیست
+    function addToList() {
+        const trackNumber = document.getElementById('trackNumber').value;
+        const dim1 = parseFloat(document.getElementById('dim1').value);
+        const dim2 = parseFloat(document.getElementById('dim2').value);
+        const dim3 = parseFloat(document.getElementById('dim3').value);
+        const boxCount = parseInt(document.getElementById('boxCount').value) || 1;
+        const weight = parseFloat(document.getElementById('weight').value) || 0;
+        
+        if (isNaN(dim1) || isNaN(dim2) || isNaN(dim3)) {
+            alert(languages[currentLang].errorInput);
+            return;
+        }
+        
+        if (!trackNumber) {
+            alert(languages[currentLang].errorTrack);
+            return;
+        }
+        
+        // ڕیزبەندکردنی پێوانەکان
+        const dimensions = [dim1, dim2, dim3].sort((a, b) => b - a);
+        const singleVolume = dimensions[0] * dimensions[1] * dimensions[2];
+        const totalVolume = singleVolume * boxCount;
+        const totalWeight = weight * boxCount;
+        
+        // دروستکردنی ئۆبجێکتی کارتۆن
+        const box = {
+            trackNumber: trackNumber,
+            dim1: dimensions[0],
+            dim2: dimensions[1],
+            dim3: dimensions[2],
+            singleVolume: singleVolume,
+            boxCount: boxCount,
+            totalVolume: totalVolume,
+            weight: weight,
+            totalWeight: totalWeight,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        
+        // زیادکردن بۆ firebase
+        db.collection("boxes").add(box)
+            .then(function(docRef) {
+                console.log("Box saved with ID: ", docRef.id);
+                // زیادکردنی ID بۆ کارتۆنەکە
+                box.id = docRef.id;
+                boxes.push(box);
                 
-                // ئەگەر زیاتر لە 1 کاتژمێر تێپەڕی (3,600,000 میلی چرکە)
-                if (timeDiff > 3600000) {
-                    // سڕینەوەی داتا
-                    localStorage.removeItem('boxCalculatorData');
-                    boxes = [];
-                    updateBoxList();
-                    updateTotalVolume();
-                    updateTrackSummary();
-                } else {
-                    // دانانی تایمەر بۆ سڕینەوەی داتا کاتێک بەسەر دەچێت
-                    const timeLeft = 3600000 - timeDiff;
-                    setTimeout(function() {
-                        localStorage.removeItem('boxCalculatorData');
-                        boxes = [];
-                        updateBoxList();
-                        updateTotalVolume();
-                        updateTrackSummary();
-                    }, timeLeft);
+                // نوێکردنەوەی خشتەکە
+                updateBoxList();
+                updateTotalVolume();
+                updateTrackSummary();
+                
+                // پاککردنەوەی فۆرمەکە
+                document.getElementById('dim1').value = '';
+                document.getElementById('dim2').value = '';
+                document.getElementById('dim3').value = '';
+                document.getElementById('boxCount').value = '1';
+                document.getElementById('weight').value = '';
+                document.getElementById('result').style.display = 'none';
+                
+                // فۆکوس بکە لە پیوانە 1
+                document.getElementById('dim1').focus();
+            })
+            .catch(function(error) {
+                console.error("Error adding box: ", error);
+                alert("هەڵە ڕوویدا لە زیادکردنی کارتۆن: " + error.message);
+            });
+    }
+    
+    // نوێکردنەوەی پوختەی تراک
+    function updateTrackSummary() {
+        const summarySection = document.getElementById('summarySection');
+        const summaryBody = document.getElementById('summaryBody');
+        
+        // گرووپ کردنی کارتۆنەکان بەپێی تراک
+        const trackGroups = {};
+        
+        boxes.forEach(box => {
+            if (!trackGroups[box.trackNumber]) {
+                trackGroups[box.trackNumber] = {
+                    count: 0,
+                    totalBoxCount: 0,
+                    totalVolume: 0,
+                    totalWeight: 0
+                };
+            }
+            
+            trackGroups[box.trackNumber].count++;
+            trackGroups[box.trackNumber].totalBoxCount += box.boxCount;
+            trackGroups[box.trackNumber].totalVolume += box.totalVolume;
+            trackGroups[box.trackNumber].totalWeight += box.totalWeight;
+        });
+        
+        // ئەگەر هیچ داتایەک نەبوو
+        if (Object.keys(trackGroups).length === 0) {
+            summarySection.style.display = 'none';
+            return;
+        }
+        
+        // نیشاندانی بەشی پوختە
+        summarySection.style.display = 'block';
+        
+        // پاککردنەوەی خشتە
+        summaryBody.innerHTML = '';
+        
+        // زیادکردنی ڕیزەکان
+        for (const track in trackGroups) {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${track}</td>
+                <td>${trackGroups[track].totalBoxCount}</td>
+                <td>${trackGroups[track].totalVolume.toFixed(3)}</td>
+                <td>${trackGroups[track].totalWeight.toFixed(2)} ${languages[currentLang].weightUnit}</td>
+                <td><button class="copy-btn" onclick="copyText('${trackGroups[track].totalVolume.toFixed(3)}')"><span class="copy-text">${languages[currentLang].copyText}</span></button></td>
+            `;
+            
+            summaryBody.appendChild(row);
+        }
+    }
+    
+    // بۆ کۆپی کردنی ئەنجام
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            // دەستکەوتنی کۆپی
+            const buttons = document.querySelectorAll('.copy-btn');
+            buttons.forEach(btn => {
+                const span = btn.querySelector('.copy-text');
+                span.textContent = languages[currentLang].copyText;
+                btn.classList.remove('copy-success');
+            });
+            
+            event.target.parentElement.classList.add('copy-success');
+            const span = event.target.querySelector('.copy-text') || event.target;
+            span.textContent = languages[currentLang].copiedText;
+            
+            setTimeout(function() {
+                if (event.target.classList.contains('copy-success')) {
+                    event.target.classList.remove('copy-success');
+                    span.textContent = languages[currentLang].copyText;
                 }
-            }
-        }
+            }, 2000);
+        });
+    }
+    
+    // بۆ کۆپی کردنی کۆی گشتی
+    function copyTotal() {
+        const total = document.getElementById('totalVolume').textContent;
+        copyText(total);
+    }
+    // سڕینەوەی کارتۆن
+    function deleteBox(index) {
+        const boxId = boxes[index].id;
         
-        // بۆ سڕینەوەی هەموو داتا بە دەستی
-        function clearAllData() {
-            if (confirm(languages[currentLang].confirmClear)) {
-                localStorage.removeItem('boxCalculatorData');
-                boxes = [];
-                updateBoxList();
-                updateTotalVolume();
-                updateTrackSummary();
-            }
-        }
-        
-        // نوێکردنەوەی داتا لە local storage دوای هەر گۆڕانکارییەک
-        function updateBoxList() {
-            const tableBody = document.getElementById('boxListBody');
-            
-            // پاککردنەوەی خشتە
-            tableBody.innerHTML = '';
-            
-            // زیادکردنی ڕیزی نوێ بۆ هەر کارتۆنێک
-            boxes.forEach((box, index) => {
-                const row = document.createElement('tr');
-                
-                row.innerHTML = `
-                    <td>${box.trackNumber}</td>
-                    <td>${box.dim1.toFixed(2)}</td>
-                    <td>${box.dim2.toFixed(2)}</td>
-                    <td>${box.dim3.toFixed(2)}</td>
-                    <td>${box.boxCount}</td>
-                    <td>${box.totalVolume.toFixed(3)}</td>
-                    <td>${box.weight > 0 ? box.totalWeight.toFixed(2) + ' ' + languages[currentLang].weightUnit : '-'}</td>
-                    <td>
-                        <button class="btn-danger" onclick="deleteBox(${index})">${languages[currentLang].deleteText}</button>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-            
-            // پاشەکەوتکردنی داتا
-            saveData();
-        }
-        
-        // نوێکردنەوەی کۆی گشتی قەبارە
-        function updateTotalVolume() {
-            const totalVolume = boxes.reduce((sum, box) => sum + box.totalVolume, 0);
-            const totalWeight = boxes.reduce((sum, box) => sum + box.totalWeight, 0);
-            
-            document.getElementById('totalVolume').textContent = totalVolume.toFixed(3);
-            document.getElementById('totalWeight').textContent = totalWeight.toFixed(2);
-        }
-        
-        // سڕینەوەی کارتۆن
-        function deleteBox(index) {
+        if (!boxId) {
+            console.error("Box doesn't have an ID to delete");
             boxes.splice(index, 1);
             updateBoxList();
             updateTotalVolume();
             updateTrackSummary();
+            return;
         }
         
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputFields = document.querySelectorAll('input[type="number"]');
-            
-            inputFields.forEach(input => {
-                input.setAttribute('inputmode', 'decimal');
+        db.collection("boxes").doc(boxId).delete()
+            .then(function() {
+                console.log("Box successfully deleted!");
+                boxes.splice(index, 1);
+                updateBoxList();
+                updateTotalVolume();
+                updateTrackSummary();
+            })
+            .catch(function(error) {
+                console.error("Error removing box: ", error);
+                alert("هەڵە ڕوویدا لە سڕینەوەی کارتۆن: " + error.message);
+            });
+    }
+    
+    // سڕینەوەی هەموو داتاکان
+    function clearAllData() {
+        if (confirm(languages[currentLang].confirmClear)) {
+            // باشترە سڕینەوەی کۆمەڵ بەکاربهێنین، بەڵام بۆ سادەیی ئێستا دانە دانە دەیسڕینەوە
+            const deletePromises = boxes.map(box => {
+                if (box.id) {
+                    return db.collection("boxes").doc(box.id).delete();
+                } else {
+                    return Promise.resolve();
+                }
             });
             
-            // دانانی ژمارەی کارتۆن بۆ 1 بە شێوەی بنەڕەتی
-            document.getElementById('boxCount').value = '1';
+            Promise.all(deletePromises)
+                .then(() => {
+                    boxes = [];
+                    updateBoxList();
+                    updateTotalVolume();
+                    updateTrackSummary();
+                    console.log("All boxes deleted!");
+                })
+                .catch(error => {
+                    console.error("Error deleting boxes: ", error);
+                });
+        }
+    }
+    
+    // نوێکردنەوەی داتا لە Firebase
+    function updateBoxList() {
+        const tableBody = document.getElementById('boxListBody');
+        
+        // پاککردنەوەی خشتە
+        tableBody.innerHTML = '';
+        
+        // زیادکردنی ڕیزی نوێ بۆ هەر کارتۆنێک
+        boxes.forEach((box, index) => {
+            const row = document.createElement('tr');
             
-            // گۆڕینی زمان بۆ بنەڕەتی
-            changeLanguage();
+            row.innerHTML = `
+                <td>${box.trackNumber}</td>
+                <td>${box.dim1.toFixed(2)}</td>
+                <td>${box.dim2.toFixed(2)}</td>
+                <td>${box.dim3.toFixed(2)}</td>
+                <td>${box.boxCount}</td>
+                <td>${box.totalVolume.toFixed(3)}</td>
+                <td>${box.weight > 0 ? box.totalWeight.toFixed(2) + ' ' + languages[currentLang].weightUnit : '-'}</td>
+                <td>
+                    <button class="btn-danger" onclick="deleteBox(${index})">${languages[currentLang].deleteText}</button>
+                </td>
+            `;
+            
+            tableBody.appendChild(row);
         });
-    </script>
+    }
+    
+    // نوێکردنەوەی کۆی گشتی قەبارە
+    function updateTotalVolume() {
+        const totalVolume = boxes.reduce((sum, box) => sum + box.totalVolume, 0);
+        const totalWeight = boxes.reduce((sum, box) => sum + box.totalWeight, 0);
+        
+        document.getElementById('totalVolume').textContent = totalVolume.toFixed(3);
+        document.getElementById('totalWeight').textContent = totalWeight.toFixed(2);
+    }
+    
+    // تاقیکردنەوەی پەیوەندی Firebase بۆ دڵنیابوون
+    function testFirebaseConnection() {
+        console.log("Checking Firebase connection...");
+        db.collection("test").add({
+            test: "Connection Test",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(function(docRef) {
+            console.log("Firebase connected successfully! Test document written with ID: ", docRef.id);
+            // سڕینەوەی دۆکیومێنتی تاقیکردنەوە
+            db.collection("test").doc(docRef.id).delete();
+        })
+        .catch(function(error) {
+            console.error("Firebase connection error: ", error);
+        });
+    }
+    
+    // گۆڕینی فەنکشنی window.onload
+    window.onload = function() {
+        // خوێندنەوەی داتا لە Firebase
+        loadBoxesFromFirebase();
+        
+        // دانانی پلەیسهۆڵدەرەکان
+        setPlaceholders();
+        
+        // دانانی ژمارەی کارتۆن بۆ 1 بە شێوەی بنەڕەتی
+        document.getElementById('boxCount').value = '1';
+                
+        // گۆڕینی زمان بۆ بنەڕەتی
+        changeLanguage();
+        
+        // تاقیکردنەوەی پەیوەندی Firebase
+        testFirebaseConnection();
+    };
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputFields = document.querySelectorAll('input[type="number"]');
+        
+        inputFields.forEach(input => {
+            input.setAttribute('inputmode', 'decimal');
+        });
+    });
+</script>
 </body>
 </html>
