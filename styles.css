@@ -1,0 +1,436 @@
+/* ستایلی گشتی و مۆدێرن */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --white-color: #ffffff;
+    --body-bg: #f5f5f5;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    --border-radius: 0.25rem;
+    --transition-speed: 0.3s;
+}
+
+/* ستایلی بەیسیک */
+body {
+    font-family: 'Amiri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--body-bg);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+/* ستایلی کارد و ئەلێمێنتەکان */
+.card {
+    background-color: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 25px;
+    overflow: hidden;
+    transition: box-shadow var(--transition-speed);
+}
+
+.card:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: #333;
+}
+
+.form-control, .form-select {
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 0.75rem;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    width: 100%;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* ستایلی دوگمەکان */
+.btn {
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all var(--transition-speed);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* ستایلی loading */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+.loading::after {
+    content: "...";
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: "."; }
+    40% { content: ".."; }
+    60% { content: "..."; }
+    80%, 100% { content: ""; }
+}
+
+/* ستایلی ئاگادارکردنەوە */
+#notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: none;
+    min-width: 300px;
+    max-width: 450px;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ستایلی پیشاندانی فۆرم */
+.preview-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    max-width: 100px;
+}
+
+.logo-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.preview-title {
+    text-align: center;
+    margin: 0 20px;
+}
+
+.preview-title h2 {
+    margin: 5px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.shipping-header {
+    background-color: #e11937 !important;
+    color: white !important;
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-radius: var(--border-radius);
+}
+
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.preview-table th, 
+.preview-table td {
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    text-align: left;
+}
+
+.preview-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+/* ستایلی مۆدال */
+.modal-content {
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: none;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 15px 20px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 15px 20px;
+}
+
+/* ستایل بۆ خشتەکان */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table th {
+    font-weight: 700;
+    background-color: #f5f5f5;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+/* ستایلی ڕێسپۆنسیڤ بۆ مۆبایل */
+@media (max-width: 767.98px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .row > [class*='col-'] {
+        margin-bottom: 15px;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .preview-header {
+        flex-direction: column;
+    }
+    
+    .logo-container {
+        margin-bottom: 10px;
+    }
+    
+    .preview-title h2 {
+        font-size: 1.2rem;
+    }
+    
+    .shipping-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .shipping-header > div {
+        margin-bottom: 10px;
+    }
+    
+    .preview-table th, 
+    .preview-table td {
+        padding: 8px;
+    }
+    
+    #notification {
+        min-width: auto;
+        width: calc(100% - 40px);
+        left: 20px;
+    }
+}
+
+/* ستایلی بۆ چاککردنی چاپکردن وەک یەک پەڕە */
+@media print {
+    @page {
+        size: A4;
+        margin: 0.5cm;
+    }
+    
+    html, body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .print-hidden {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .preview-container {
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        background-color: white;
+    }
+    
+    .print-page {
+        page-break-after: always;
+        max-height: 270mm; /* کەمێک کەمتر لە A4 بۆ ئەوەی جێگای ڕووپەڕەکە بگرێت */
+        overflow: hidden;
+    }
+    
+    .preview-header {
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .preview-title h2 {
+        font-size: 1.2rem;
+        margin: 3px 0;
+    }
+    
+    .logo-container img {
+        max-height: 80px;
+    }
+    
+    .shipping-header {
+        padding: 8px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .preview-table th, 
+    .preview-table td {
+        padding: 5px 10px;
+    }
+    
+    p {
+        margin: 0.5em 0;
+        font-size: 0.9rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    h4 {
+        font-size: 1rem;
+    }
+}
