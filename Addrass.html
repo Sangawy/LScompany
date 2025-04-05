@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ku-arab" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستەمی چاپکردنی فۆرمەکانی شحن</title>
+    
+    <!-- فۆنتی کوردی -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- فایلی CSS تایبەت -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- ناونیشان -->
+        <div class="card print-hidden">
+            <div class="card-body text-center">
+                <h1 class="card-title mb-3">سیستەمی چاپکردنی ناونیشانی کۆگاکان</h1>
+                <p class="card-text">دروستکردنی فایل ئەدریسی کۆگاکان  </p>
+            </div>
+        </div>
+
+        <!-- ئاگادارکردنەوە -->
+        <div id="notification" class="alert" role="alert"></div>
+        
+        <!-- فۆرمی زانیاریەکان -->
+        <div class="card print-hidden">
+            <div class="card-body">
+                <h3 class="card-title mb-4">داخلکردنی زانیاریەکان</h3>
+                
+                <form id="shippingForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="formType" class="form-label">جۆری فۆرم:</label>
+                            <select class="form-select" id="formType" required>
+                                <option value="" selected disabled>تکایە هەڵبژێرە...</option>
+                                <option value="dubai-air">هەوایی دووبەی</option>
+                                <option value="dubai-sea">بەحری دووبەی</option>
+                                <option value="guangzhou-air">هەوایی گوانژو</option>
+                                <option value="guangzhou-sea">بەحری گوانژو</option>
+                                <option value="yiwu-sea">بەحری یوو</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customerSearch" class="form-label">گەڕان بە ناوی کەس یان ID:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="customerSearch">
+                                <button class="btn btn-primary" type="button" id="searchBtn">گەڕان</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                       
+                        <!-- بەشە پارێزراوەکان -->
+    <div class="col-md-4">
+        <label for="customerCode" class="form-label">Customer code:</label>
+        <input type="text" class="form-control" id="customerCode" required>
+    </div>
+    <div class="col-md-8">
+        <label for="customerName" class="form-label">Customer name:</label>
+        <input type="text" class="form-control" id="customerName" required>
+    </div>
+    <div class="col-md-4">
+        <label for="customerLogo" class="form-label">Customer LOGO:</label>
+        <input type="text" class="form-control" id="customerLogo">
+    </div>
+    <div class="col-md-8">
+        <label for="destination" class="form-label">Destination:</label>
+        <input type="text" class="form-control" id="destination" required>
+    </div>
+    <div class="col-12 mt-4">
+        <button type="button" id="previewBtn" class="btn btn-primary me-2">پیشاندان</button>
+        <button type="button" id="printBtn" class="btn btn-success me-2">چاپکردن</button>
+        <button type="reset" class="btn btn-secondary me-2">پاککردنەوە</button>
+        <a href="Persson.html" class="btn btn-outline-primary">گەڕانەوە بۆ سەرەکی</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- پیشاندانی فۆرمەکە -->
+        <div id="previewContainer" class="preview-container" style="display: none;">
+            <!-- دیزاینی فۆرمەکە لێرە دادەنرێت بە داینامیکی -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
+    
+    <!-- کۆدی جاڤاسکریپت -->
+    <script>
+        // ڕێکخستنەکانی پەیوەندی بە فایەربەیس
+        const firebaseConfig = {
+            apiKey: "AIzaSyC2539t0L3Zms_jd7Z_qzJrzSV2dU_viS4",
+            authDomain: "persson-database.firebaseapp.com",
+            projectId: "persson-database",
+            storageBucket: "persson-database.firebasestorage.app",
+            messagingSenderId: "1002896345987",
+            appId: "1:1002896345987:web:4bb12ac4c5d13fba0c44b6",
+            measurementId: "G-5PC29H4823"
+        };
+        
+        // دەستپێکردنی فایەربەیس
+        firebase.initializeApp(firebaseConfig);
+        
+        // گرتنی ڕیفرێنسی داتابەیس
+        const db = firebase.firestore();
+        const personsCollection = db.collection('persons');
+        
+        // فۆرماتەکانی شحن
+        const shippingFormats = {
+            'dubai-air': {
+                title: 'Air Logistics Services - Dubai',
+                subtitle: 'مستودع خدمات النقل الجوي - دبي',
+                logo: 'plane.png',
+                contactInfo: 'Dubai airport free-zone, block H office H24, al Qudes street, dubai, United Arab Emirates<br>Warehouse Manager: Mr. Ajmal +971 50 223 4842<br>Warehouse Operation: Mr. KIM +971 56 935 9915'
+            },
+            'dubai-sea': {
+                title: 'Sea Logistics Dubai',
+                subtitle: 'عنوان المستودع البحري في مدينة دبي',
+                logo: 'ship.png',
+                contactInfo: 'Al Khaleej Street near Hamriyah Port, Dubai, United Arab Emirates<br>Warehouse Manager : Mr. Mark: +971 56 414 7224<br>Sea freight manager : Mr. Abdulaziz: +971 56 402 4502'
+            },
+            'guangzhou-air': {
+                title: 'Air Logistics Services - Guangzhou City, China',
+                subtitle: '广州空运物流服务',
+                logo: 'plane.png',
+                contactInfo: 'Air warehouse address in china for your reference:<br>NO.6-3 First floor haiming street, BinijiangXi Road, HaiZhu area, Guangzhou, China<br>Contact Person: MR Wang, Tel.: 15989089401'
+            },
+            'guangzhou-sea': {
+                title: 'Sea Logistics Services - Guangzhou City, China',
+                subtitle: '广州海运物流服务',
+                logo: 'ship.png',
+                contactInfo: 'Room c21-23, zone C, baiyun lake storage park,<br>no. 1, jiaoxin avenue, baiyun district, guangzhou city<br>Working time: 10:00 - 18:30, Monday to Saturday'
+            },
+            'yiwu-sea': {
+                title: 'Sea Logistics Services - Yiwu City, China',
+                subtitle: '义乌海运物流服务',
+                logo: 'ship.png',
+                contactInfo: '1st floor, Building B, No.1 Pinghai Road, Jiangdong Street, Yiwu City, Zhejiang Province, China<br>Contact Person: MR Wang ,Tel.: +86-133 3592 9157'
+            }
+        };
+        
+        // کاتێک پەڕەکە ئامادە دەبێت
+        document.addEventListener('DOMContentLoaded', function() {
+            // بەڕێوەبردنی گەڕان
+            document.getElementById('searchBtn').addEventListener('click', searchCustomer);
+            
+            // پیشاندانی فۆرم و چاپکردن
+            document.getElementById('previewBtn').addEventListener('click', previewShippingForm);
+            document.getElementById('printBtn').addEventListener('click', printShippingForm);
+        });
+        
+        // فەنکشنی پیشاندانی ئاگادارکردنەوە
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `alert alert-${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // فەنکشنی گەڕان بە ناوی کەس
+        function searchCustomer() {
+            const searchValue = document.getElementById('customerSearch').value.trim();
+            
+            if (!searchValue) {
+                showNotification('تکایە وشەی گەڕان داخل بکە', 'warning');
+                return;
+            }
+            
+            // گەڕان لە داتابەیس بۆ هەموو فیلدەکان و کۆکردنەوەی ئەنجامەکان
+            const results = [];
+            const searchPromises = [];
+            
+            if (!isNaN(searchValue)) {
+                // گەڕان بەپێی ID
+                searchPromises.push(
+                    personsCollection.where('Persson_ID', '==', parseInt(searchValue)).get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => results.push({id: doc.id, ...doc.data()}));
+                    })
+                );
+            } else {
+                // گەڕان بەپێی ناو
+                searchPromises.push(
+                    personsCollection.where('Naw', '>=', searchValue)
+                                    .where('Naw', '<=', searchValue + '\uf8ff').get()
+                                    .then(snapshot => {
+                                        snapshot.forEach(doc => results.push({id: doc.id, ...doc.data()}));
+                                    })
+                );
+                
+                // گەڕان بەپێی ناوی ئینگلیزی
+                searchPromises.push(
+                    personsCollection.where('Name_en', '>=', searchValue)
+                                    .where('Name_en', '<=', searchValue + '\uf8ff').get()
+                                    .then(snapshot => {
+                                        snapshot.forEach(doc => {
+                                            // دڵنیابوون لەوەی کە هەمان دۆکیومێنت دووبارە نەبێتەوە
+                                            if (!results.some(item => item.id === doc.id)) {
+                                                results.push({id: doc.id, ...doc.data()});
+                                            }
+                                        });
+                                    })
+                );
+                
+                // گەڕان بەپێی لۆگۆ - بەبێ هەستیاری بە کاپیتاڵ/سمۆڵ
+                searchPromises.push(
+                    // فەنکشنی arrayContains بەکارناهێنین چونکە ناکرێت ڕاستەخۆ
+                    // لەبری ئەوە هەموو دۆکیومێنتەکان وەردەگرین و دواتر فیلتەریان دەکەین
+                    personsCollection.get().then(snapshot => {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const logo = (data.Logo || '').toLowerCase();
+                            
+                            if (logo.includes(searchValue.toLowerCase()) && 
+                                !results.some(item => item.id === doc.id)) {
+                                results.push({id: doc.id, ...data});
+                            }
+                        });
+                    })
+                );
+                
+                // گەڕان بەپێی مۆبایل
+                searchPromises.push(
+                    personsCollection.where('Mobil', '>=', searchValue)
+                                    .where('Mobil', '<=', searchValue + '\uf8ff').get()
+                                    .then(snapshot => {
+                                        snapshot.forEach(doc => {
+                                            if (!results.some(item => item.id === doc.id)) {
+                                                results.push({id: doc.id, ...doc.data()});
+                                            }
+                                        });
+                                    })
+                );
+                
+                // گەڕان بەپێی ZMC_code
+                searchPromises.push(
+                    personsCollection.where('ZMC_code', '>=', searchValue)
+                                    .where('ZMC_code', '<=', searchValue + '\uf8ff').get()
+                                    .then(snapshot => {
+                                        snapshot.forEach(doc => {
+                                            if (!results.some(item => item.id === doc.id)) {
+                                                results.push({id: doc.id, ...doc.data()});
+                                            }
+                                        });
+                                    })
+                );
+                
+                // گەڕان بەپێی کۆدی کەس 
+                searchPromises.push(
+                    personsCollection.where('persson_code', '>=', searchValue)
+                                    .where('persson_code', '<=', searchValue + '\uf8ff').get()
+                                    .then(snapshot => {
+                                        snapshot.forEach(doc => {
+                                            if (!results.some(item => item.id === doc.id)) {
+                                                results.push({id: doc.id, ...doc.data()});
+                                            }
+                                        });
+                                    })
+                );
+            }
+            
+            // جێبەجێکردنی هەموو پرۆمیسەکان و پیشاندانی ئەنجامەکان
+            Promise.all(searchPromises)
+                .then(() => {
+                    if (results.length === 0) {
+                        showNotification('هیچ کەسێک نەدۆزرایەوە', 'warning');
+                        return;
+                    }
+                    
+                    if (results.length === 1) {
+                        // ئەگەر تەنها یەک ئەنجام هەبوو، ڕاستەوخۆ پڕی بکەوە
+                        fillCustomerData(results[0]);
+                    } else {
+                        // ئەگەر چەندین ئەنجام هەبوو، لیستێک پیشان بدە
+                        showSearchResults(results);
+                    }
+                })
+                .catch((error) => {
+                    console.error("هەڵە لە گەڕان: ", error);
+                    showNotification('هەڵەیەک ڕوویدا لە کاتی گەڕان', 'danger');
+                });
+        }
+
+        // فەنکشنێک بۆ پیشاندانی ئەنجامەکانی گەڕان
+        function showSearchResults(results) {
+            // دروستکردنی مۆدال بۆ پیشاندانی لیستی ئەنجامەکان
+            const modalHTML = `
+                <div class="modal fade" id="searchResultsModal" tabindex="-1" aria-labelledby="searchResultsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header" dir="rtl">
+                                <h5 class="modal-title" id="searchResultsModalLabel">ئەنجامەکانی گەڕان (${results.length} ئەنجام)</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" dir="rtl">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>ناو</th>
+                                                <th>ناوی ئینگلیزی</th>
+                                                <th>لۆگۆ</th>
+                                                <th>وڵات</th>
+                                                <th>کردار</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${results.map(person => `
+                                                <tr>
+                                                    <td>${person.Persson_ID || ''}</td>
+                                                    <td>${person.Naw || ''}</td>
+                                                    <td>${person.Name_en || ''}</td>
+                                                    <td>${person.Logo || ''}</td>
+                                                    <td>${person.Country || ''}</td>
+                                                    <td>
+                                                        <button class="btn btn-primary btn-sm select-person" 
+                                                                data-id="${person.id}" 
+                                                                data-bs-dismiss="modal">
+                                                            هەڵبژاردن
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // زیادکردنی مۆدال بۆ DOM
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHTML;
+            document.body.appendChild(modalContainer);
+            
+            // پیشاندانی مۆدال
+            const modal = new bootstrap.Modal(document.getElementById('searchResultsModal'));
+            modal.show();
+            
+            // زیادکردنی ئیڤێنت بۆ دوگمەکانی هەڵبژاردن
+            document.querySelectorAll('.select-person').forEach(button => {
+                button.addEventListener('click', function() {
+                    const personId = this.getAttribute('data-id');
+                    const selectedPerson = results.find(p => p.id === personId);
+                    
+                    fillCustomerData(selectedPerson);
+                    
+                    // لابردنی مۆدال دوای بەکارهێنان
+                    setTimeout(() => {
+                        document.body.removeChild(modalContainer);
+                    }, 500);
+                });
+            });
+            
+            // لابردنی مۆدال دوای داخستن
+            document.getElementById('searchResultsModal').addEventListener('hidden.bs.modal', function() {
+                setTimeout(() => {
+                    if (document.body.contains(modalContainer)) {
+                        document.body.removeChild(modalContainer);
+                    }
+                }, 500);
+            });
+            
+            // زیادکردنی ستایلی RTL بۆ ناو مۆدال
+            const modalStyles = document.createElement('style');
+            modalStyles.textContent = `
+                #searchResultsModal[dir="rtl"] .modal-header .btn-close {
+                    margin: -0.5rem auto -0.5rem -0.5rem;
+                }
+                
+                #searchResultsModal[dir="rtl"] .table {
+                    text-align: right;
+                }
+            `;
+            document.head.appendChild(modalStyles);
+        }
+
+        // فەنکشنێک بۆ پڕکردنەوەی فۆڕمەکە بە زانیاری کەسێک
+        function fillCustomerData(person) {
+            document.getElementById('customerCode').value = person.persson_code || '';
+            document.getElementById('customerName').value = person.Name_en || person.Naw || '';
+            document.getElementById('customerLogo').value = person.Logo || '';
+            document.getElementById('destination').value = person.Country || '';
+            
+            showNotification('کەس دۆزرایەوە و زانیاریەکان پڕکرانەوە', 'success');
+        }
+        
+        // فەنکشنی پیشاندانی فۆرمی شحن
+        function previewShippingForm() {
+            const formType = document.getElementById('formType').value;
+            
+            if (!formType) {
+                showNotification('تکایە جۆری فۆرم هەڵبژێرە', 'warning');
+                return;
+            }
+            
+// وەرگرتنی زانیاریەکان لە فۆڕمەکە
+const formData = {
+    customerCode: document.getElementById('customerCode').value,
+    customerName: document.getElementById('customerName').value,
+    customerLogo: document.getElementById('customerLogo').value,
+    destination: document.getElementById('destination').value
+};
+            
+            // چێککردنی بەهاکانی پێویست
+            if (!formData.customerCode || !formData.customerName || !formData.destination) {
+                showNotification('تکایە زانیاریە پێویستەکان داخل بکە', 'warning');
+                return;
+            }
+            
+            // دروستکردنی HTML ی فۆرمەکە
+            const formFormat = shippingFormats[formType];
+            const currentDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // دیاریکردنی جۆری هێدەر بەپێی فۆرم
+            let headerHTML = '';
+            if (formType === 'dubai-air' || formType === 'dubai-sea') {
+                // فۆرمەکانی دووبەی - هەردوو لۆگۆ هەبێت
+                headerHTML = `
+                    <div class="preview-header">
+                        <div class="logo-container">
+                            <img src="images/baran_cargo.png" alt="Baran Cargo">
+                        </div>
+                        <div class="preview-title">
+                            <h2>کۆمپانیای لوتکەی شاهۆ</h2>
+                            <h2>Baran Cargo</h2>
+                        </div>
+                        <div class="logo-container">
+                            <img src="images/ls_express.png" alt="LS Express">
+                        </div>
+                    </div>
+                `;
+            } else {
+                // فۆرمەکانی چین - تەنها لۆگۆی LS
+                headerHTML = `
+                    <div class="preview-header">
+                        <div class="logo-container" style="width: 30%"></div>
+                        <div class="preview-title">
+                            <h2>کۆمپانیای لوتکەی شاهۆ</h2>
+                            <h2>LS Express Company</h2>
+                        </div>
+                        <div class="logo-container">
+                            <img src="images/ls_express.png" alt="LS Express">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let formHTML = `
+                <div class="print-page" dir="ltr">
+                    ${headerHTML}
+                    
+                    <div class="shipping-header">
+                        <div style="display: flex; align-items: center;">
+                            <img src="images/burj.png" alt="Burj" style="height: 40px; margin-right: 15px;">
+                        </div>
+                        <div style="text-align: center;">
+                            <h3>${formFormat.title}</h3>
+                            <p>${formFormat.subtitle}</p>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <img src="images/${formFormat.logo}" alt="Transport" style="height: 35px; margin-left: 15px;">
+                        </div>
+                    </div>
+                    
+                    <p>Applications for the provision of services and transportation of goods we are providing the first class logistics service by air and by sea world wide kindly be requested to fill in the required blanks for ease of treatment.</p>
+                    
+                    <table class="preview-table">
+                        <tr>
+                            <th width="30%">C/NO. 箱号：</th>
+                            <td>${formData.cno}</td>
+                        </tr>
+                        <tr>
+                            <th>Customer code:</th>
+                            <td>${formData.customerCode}</td>
+                        </tr>
+                        <tr>
+                            <th>Customer name:</th>
+                            <td>${formData.customerName}</td>
+                        </tr>
+                        <tr>
+                            <th>Customer LOGO:</th>
+                            <td>${formData.customerLogo}</td>
+                        </tr>
+                        <tr>
+                            <th>Destination</th>
+                            <td>${formData.destination}</td>
+                        </tr>
+                    </table>
+                    
+                    <p>Port of loading: ${formData.portLoading}</p>
+                    <p>Port of discharge: ${formData.portDischarge}</p>
+                    <p>Commodity: ${formData.commodity}</p>
+                    <p>Quantities: ${formData.quantities}</p>
+                    
+                    <div style="border: 1px solid #000; padding: 10px; margin: 15px 0;">
+                        <h4>For delivery and contact number please find below details</h4>
+                        <p>${formFormat.contactInfo}</p>
+                    </div>
+                    
+                    <div style="border: 1px solid #000; padding: 10px; margin: 15px 0;">
+                        <h4>Terms and conditions</h4>
+                        <p>Please mark the customer details with logo, contact number and final destinations.</p>
+                        <p>Please provide clearly the packing list with clear commodity and Quantities, country of origin and with battery or no, and should all the cargo to be declare as general cargo Does not contain dangerous substances.</p>
+                        <p>Our company assumes no responsibility for any incorrect information that may lead to the seizure of goods. All required information must be correct and be the responsibility of the shipping applicant. success is your success and we always aspire to develop our services to level your expectations</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 15px; font-size: 12px; color: #777;">
+                        <p>Page 1 of 1                                                           ${currentDate}</p>
+                    </div>
+                </div>
+            `;
+            
+            // پیشاندانی فۆرمەکە
+            const previewContainer = document.getElementById('previewContainer');
+            previewContainer.innerHTML = formHTML;
+            previewContainer.style.display = 'block';
+            
+            window.scrollTo({
+                top: previewContainer.offsetTop,
+                behavior: 'smooth'
+            });
+        }
+        
+        // فەنکشنی چاپکردن
+        function printShippingForm() {
+            const previewContainer = document.getElementById('previewContainer');
+            
+            if (previewContainer.style.display === 'none') {
+                // ئەگەر پیشاندراو نەبێت، یەکەم جار پیشانی بدە
+                previewShippingForm();
+                
+                // چاوەڕێ بکە تاکو پیشان دەدرێت، پاشان چاپی بکە
+                setTimeout(() => {
+                    window.print();
+                }, 500);
+            } else {
+                // ڕاستەوخۆ چاپی بکە
+                window.print();
+            }
+        }
+    </script>
+</body>
+</html>

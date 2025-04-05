@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ku-arab" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستەمی بەڕێوەبردنی زانیاری کەسەکان</title>
+    
+    <!-- فۆنتی کوردی -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- فایلی CSS تایبەت -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- ناونیشان -->
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="card-title mb-3">سیستەمی بەڕێوەبردنی زانیاری بازرگانەکەن</h1>
+                <p class="card-text">تۆماری زانیاری کەسەکان، گەڕان، زیادکردن، گۆڕین و سڕینەوە</p>
+            </div>
+        </div>
+        
+        <!-- ئاگادارکردنەوە -->
+        <div id="notification" class="alert" role="alert"></div>
+        
+        <!-- تاب و تابەکان -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab" aria-controls="search" aria-selected="true">گەڕان و بینین</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab" aria-controls="add" aria-selected="false">زیادکردن</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button" role="tab" aria-controls="edit" aria-selected="false">گۆڕین</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="report-tab" data-bs-toggle="tab" data-bs-target="#report" type="button" role="tab" aria-controls="report" aria-selected="false">ڕاپۆرت</button>
+            </li>
+        </ul>
+        
+        <!-- ناوەڕۆکی تابەکان -->
+        <div class="tab-content" id="myTabContent">
+            
+            <!-- تابی گەڕان و بینین -->
+            <div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">گەڕان لە زانیاری کەسەکان</h3>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <label for="searchField" class="form-label">گەڕان بەپێی:</label>
+                                <select class="form-select" id="searchField">
+                                    <option value="Persson_ID">ID</option>
+                                    <option value="Naw">ناو</option>
+                                    <option value="Mobil">مۆبایل</option>
+                                    <option value="emaill">ئیمەیڵ</option>
+                                    <option value="Country">وڵات</option>
+                                    <option value="ZMC_code">کۆدی ZMC</option>
+                                </select>
+                            </div>
+                            <div class="col-md-7">
+                                <label for="searchValue" class="form-label">وشەی گەڕان:</label>
+                                <input type="text" class="form-control" id="searchValue">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-primary w-100" id="searchBtn">گەڕان</button>
+                            </div>
+                        </div>
+                        
+                        <div class="btn-toolbar" role="toolbar">
+                            <button type="button" class="btn btn-outline-primary me-2" id="showAllBtn">پیشاندانی هەموو</button>
+                            <button type="button" class="btn btn-outline-danger me-2" id="deleteSelectedBtn">سڕینەوەی دیاریکراوەکان</button>
+                            <button type="button" class="btn btn-outline-success me-2" id="exportCSVBtn">هەناردن بۆ CSV</button>
+                            <button type="button" class="btn btn-info me-2" onclick="window.location.href='Addrass.html'">فۆرمەکانی ناونیشان</button>
+
+                        </div>
+                        
+                        <div id="searchLoading" class="loading">چاوەڕوانی گەڕان بە</div>
+                        
+                        <div id="searchResults">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th><input type="checkbox" id="selectAll"></th>
+                                            <th>ID</th>
+                                            <th>ناو</th>
+                                            <th>لۆگۆ</th>
+                                            <th>مۆبایل</th>
+                                            <th>ئیمەیڵ</th>
+                                            <th>وڵات</th>
+                                            <th>کۆدی ZMC</th>
+                                            <th>کردارەکان</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resultsBody">
+                                        <!-- لێرە داتاکان دادەنرێن -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center" id="pagination">
+                                    <!-- لێرە پەیجەکان دادەنرێن -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تابی زیادکردن -->
+            <div class="tab-pane fade" id="add" role="tabpanel" aria-labelledby="add-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">زیادکردنی کەسێکی نوێ</h3>
+                        
+                        <form id="addPersonForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="addNaw" class="form-label">ناو:</label>
+                                    <input type="text" class="form-control" id="addNaw" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="addNameEn" class="form-label">ناوی ئینگلیزی:</label>
+                                    <input type="text" class="form-control" id="addNameEn">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addLogo" class="form-label">لۆگۆ:</label>
+                                    <input type="text" class="form-control" id="addLogo">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addMobil" class="form-label">مۆبایل:</label>
+                                    <input type="text" class="form-control" id="addMobil">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addMobile2" class="form-label">مۆبایلی دووەم:</label>
+                                    <input type="text" class="form-control" id="addMobile2">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addEmail" class="form-label">ئیمەیڵ:</label>
+                                    <input type="email" class="form-control" id="addEmail">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addCountry" class="form-label">وڵات:</label>
+                                    <input type="text" class="form-control" id="addCountry">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addZMCCode" class="form-label">کۆدی ZMC:</label>
+                                    <input type="text" class="form-control" id="addZMCCode">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addPassword" class="form-label">وشەی نهێنی:</label>
+                                    <input type="text" class="form-control" id="addPassword">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addPersonCode" class="form-label">کۆدی کەس:</label>
+                                    <input type="text" class="form-control" id="addPersonCode">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addPDFProfile" class="form-label">پرۆفایلی PDF:</label>
+                                    <input type="text" class="form-control" id="addPDFProfile">
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-success">زیادکردن</button>
+                                    <button type="reset" class="btn btn-secondary">پاککردنەوە</button>
+                                    //<button type="button" class="btn btn-info me-2" onclick="window.location.href='Addrass.html'">فۆرمەکانی ناونیشان</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تابی گۆڕین -->
+            <div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">گۆڕینی زانیاری کەس</h3>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-8">
+                                <label for="editSearchID" class="form-label">ID ی کەس بۆ گۆڕین:</label>
+                                <input type="text" class="form-control" id="editSearchID">
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="button" class="btn btn-primary w-100" id="findForEditBtn">دۆزینەوە</button>
+                            </div>
+                        </div>
+                        
+                        <div id="editLoading" class="loading">گەڕان بۆ زانیاری کەس...</div>
+                        
+                        <form id="editPersonForm" style="display: none;">
+                            <input type="hidden" id="editID">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="editNaw" class="form-label">ناو:</label>
+                                    <input type="text" class="form-control" id="editNaw" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="editNameEn" class="form-label">ناوی ئینگلیزی:</label>
+                                    <input type="text" class="form-control" id="editNameEn">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editLogo" class="form-label">لۆگۆ:</label>
+                                    <input type="text" class="form-control" id="editLogo">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editMobil" class="form-label">مۆبایل:</label>
+                                    <input type="text" class="form-control" id="editMobil">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editMobile2" class="form-label">مۆبایلی دووەم:</label>
+                                    <input type="text" class="form-control" id="editMobile2">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editEmail" class="form-label">ئیمەیڵ:</label>
+                                    <input type="email" class="form-control" id="editEmail">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editCountry" class="form-label">وڵات:</label>
+                                    <input type="text" class="form-control" id="editCountry">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editZMCCode" class="form-label">کۆدی ZMC:</label>
+                                    <input type="text" class="form-control" id="editZMCCode">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editPassword" class="form-label">وشەی نهێنی:</label>
+                                    <input type="text" class="form-control" id="editPassword">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editPersonCode" class="form-label">کۆدی کەس:</label>
+                                    <input type="text" class="form-control" id="editPersonCode">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editPDFProfile" class="form-label">پرۆفایلی PDF:</label>
+                                    <input type="text" class="form-control" id="editPDFProfile">
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-warning">نوێکردنەوە</button>
+                                    <button type="button" class="btn btn-danger" id="deletePersonBtn">سڕینەوە</button>
+                                    <button type="reset" class="btn btn-secondary">پاککردنەوە</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- تابی ڕاپۆرت -->
+            <div class="tab-pane fade" id="report" role="tabpanel" aria-labelledby="report-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">ڕاپۆرتەکان</h3>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">ڕاپۆرتی کەسەکان بەپێی وڵات</h5>
+                                        <p class="card-text">ژمارەی کەسەکان لە هەر وڵاتێک</p>
+                                        <button type="button" class="btn btn-primary" id="countryReportBtn">دروستکردنی ڕاپۆرت</button>
+                                        <div id="countryReportChart" class="mt-3" style="height: 300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">ڕاپۆرتی زانیاری ناتەواو</h5>
+                                        <p class="card-text">کەسەکان بە زانیاری ناتەواو (بێ ئیمەیڵ، مۆبایل، ...)</p>
+                                        <button type="button" class="btn btn-primary" id="missingDataReportBtn">دروستکردنی ڕاپۆرت</button>
+                                        <div id="missingDataReportChart" class="mt-3" style="height: 300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">لیستی ڕاپۆرتەکانی تر</h5>
+                                        <div class="list-group">
+                                            <button type="button" class="list-group-item list-group-item-action" id="exportFullReportBtn">
+                                                هەناردنی ڕاپۆرتی تەواو (PDF)
+                                            </button>
+                                            <button type="button" class="list-group-item list-group-item-action" id="printReportBtn">
+                                                چاپکردنی لیستی هەموو کەسەکان
+                                            </button>
+                                            <button type="button" class="list-group-item list-group-item-action" id="monthlyReportBtn">
+                                                ڕاپۆرتی مانگانە
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal بۆ بینینی وردەکاری -->
+    <div class="modal fade" id="personDetailsModal" tabindex="-1" aria-labelledby="personDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="personDetailsModalLabel">وردەکاری کەس</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="personDetailsBody">
+                    <!-- لێرە وردەکاری کەس دادەنرێت -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">داخستن</button>
+                    <button type="button" class="btn btn-primary" id="editFromDetailsBtn">گۆڕین</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
+    
+    <!-- کۆدی جاڤاسکریپت تایبەت -->
+    <script src="app.js"></script>
+</body>
+</html>
